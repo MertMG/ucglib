@@ -107,7 +107,7 @@ static const ucg_pgm_uint8_t ucg_univision_ssd1331_init_seq[] = {
 	UCG_END(),					/* end of sequence */
 };
 
-ucg_int_t ucg_dev_ssd1331_18x96x64_univision(ucg_t *ucg, ucg_int_t msg, void *data)
+ucg_int_t ICACHE_FLASH_ATTR ucg_dev_ssd1331_18x96x64_univision(ucg_t *ucg, ucg_int_t msg, void *data)
 {
   switch(msg)
   {

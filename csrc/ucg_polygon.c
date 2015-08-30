@@ -48,7 +48,7 @@ static void pg_line_init(pg_struct * const pg, uint8_t pge_index) PG_NOINLINE;
 /*===========================================*/
 /* line draw algorithm */
 
-static uint8_t pge_Next(struct pg_edge_struct *pge)
+static uint8_t ICACHE_FLASH_ATTR pge_Next(struct pg_edge_struct *pge)
 {
   if ( pge->current_y >= pge->max_y )
     return 0;
@@ -66,7 +66,7 @@ static uint8_t pge_Next(struct pg_edge_struct *pge)
 }
 
 /* assumes y2 > y1 */
-static void pge_Init(struct pg_edge_struct *pge, pg_word_t x1, pg_word_t y1, pg_word_t x2, pg_word_t y2)
+static void ICACHE_FLASH_ATTR pge_Init(struct pg_edge_struct *pge, pg_word_t x1, pg_word_t y1, pg_word_t x2, pg_word_t y2)
 {
   pg_word_t dx = x2 - x1;
   pg_word_t width;
@@ -96,7 +96,7 @@ static void pge_Init(struct pg_edge_struct *pge, pg_word_t x1, pg_word_t y1, pg_
 /*===========================================*/
 /* convex polygon algorithm */
 
-static uint8_t pg_inc(pg_struct *pg, uint8_t i)
+static uint8_t ICACHE_FLASH_ATTR pg_inc(pg_struct *pg, uint8_t i)
 {
     i++;
     if ( i >= pg->cnt )
@@ -104,7 +104,7 @@ static uint8_t pg_inc(pg_struct *pg, uint8_t i)
     return i;
 }
 
-static uint8_t pg_dec(pg_struct *pg, uint8_t i)
+static uint8_t ICACHE_FLASH_ATTR pg_dec(pg_struct *pg, uint8_t i)
 {
     i--;
     if ( i >= pg->cnt )
@@ -112,7 +112,7 @@ static uint8_t pg_dec(pg_struct *pg, uint8_t i)
     return i;
 }
 
-static void pg_expand_min_y(pg_struct *pg, pg_word_t min_y, uint8_t pge_idx)
+static void ICACHE_FLASH_ATTR pg_expand_min_y(pg_struct *pg, pg_word_t min_y, uint8_t pge_idx)
 {
   uint8_t i = pg->pge[pge_idx].curr_idx;
   for(;;)
@@ -124,7 +124,7 @@ static void pg_expand_min_y(pg_struct *pg, pg_word_t min_y, uint8_t pge_idx)
   }
 }
 
-static uint8_t pg_prepare(pg_struct *pg)
+static uint8_t ICACHE_FLASH_ATTR pg_prepare(pg_struct *pg)
 {
   pg_word_t max_y;
   pg_word_t min_y;
@@ -180,7 +180,7 @@ static uint8_t pg_prepare(pg_struct *pg)
   return 1;
 }
 
-static void pg_hline(pg_struct *pg, ucg_t *ucg)
+static void ICACHE_FLASH_ATTR pg_hline(pg_struct *pg, ucg_t *ucg)
 {
   pg_word_t x1, x2, y;
   x1 = pg->pge[PG_LEFT].current_x;
@@ -217,7 +217,7 @@ static void pg_hline(pg_struct *pg, ucg_t *ucg)
   }
 }
 
-static void pg_line_init(pg_struct * pg, uint8_t pge_index)
+static void ICACHE_FLASH_ATTR pg_line_init(pg_struct * pg, uint8_t pge_index)
 {
   struct pg_edge_struct  *pge = pg->pge+pge_index;
   uint8_t idx;  
@@ -237,7 +237,7 @@ static void pg_line_init(pg_struct * pg, uint8_t pge_index)
   pge_Init(pge, x1, y1, x2, y2);
 }
 
-static void pg_exec(pg_struct *pg, ucg_t *ucg)
+static void ICACHE_FLASH_ATTR pg_exec(pg_struct *pg, ucg_t *ucg)
 {
   pg_word_t i = pg->total_scan_line_cnt;
 
@@ -269,12 +269,12 @@ static void pg_exec(pg_struct *pg, ucg_t *ucg)
 /*===========================================*/
 /* API procedures */
 
-void pg_ClearPolygonXY(pg_struct *pg)
+void ICACHE_FLASH_ATTR pg_ClearPolygonXY(pg_struct *pg)
 {
   pg->cnt = 0;
 }
 
-void pg_AddPolygonXY(pg_struct *pg, ucg_t *ucg, int16_t x, int16_t y)
+void ICACHE_FLASH_ATTR pg_AddPolygonXY(pg_struct *pg, ucg_t *ucg, int16_t x, int16_t y)
 {
   if ( pg->cnt < PG_MAX_POINTS )
   {
@@ -284,7 +284,7 @@ void pg_AddPolygonXY(pg_struct *pg, ucg_t *ucg, int16_t x, int16_t y)
   }
 }
 
-void pg_DrawPolygon(pg_struct *pg, ucg_t *ucg)
+void ICACHE_FLASH_ATTR pg_DrawPolygon(pg_struct *pg, ucg_t *ucg)
 {
   if ( pg_prepare(pg) == 0 )
     return;
@@ -293,22 +293,22 @@ void pg_DrawPolygon(pg_struct *pg, ucg_t *ucg)
 
 pg_struct ucg_pg;
 
-void ucg_ClearPolygonXY(void)
+void ICACHE_FLASH_ATTR ucg_ClearPolygonXY(void)
 {
   pg_ClearPolygonXY(&ucg_pg);
 }
 
-void ucg_AddPolygonXY(ucg_t *ucg, int16_t x, int16_t y)
+void ICACHE_FLASH_ATTR ucg_AddPolygonXY(ucg_t *ucg, int16_t x, int16_t y)
 {
   pg_AddPolygonXY(&ucg_pg, ucg, x, y);
 }
 
-void ucg_DrawPolygon(ucg_t *ucg)
+void ICACHE_FLASH_ATTR ucg_DrawPolygon(ucg_t *ucg)
 {
   pg_DrawPolygon(&ucg_pg, ucg);
 }
 
-void ucg_DrawTriangle(ucg_t *ucg, int16_t x0, int16_t y0, int16_t x1, int16_t y1, int16_t x2, int16_t y2)
+void ICACHE_FLASH_ATTR ucg_DrawTriangle(ucg_t *ucg, int16_t x0, int16_t y0, int16_t x1, int16_t y1, int16_t x2, int16_t y2)
 {
   ucg_ClearPolygonXY();
   ucg_AddPolygonXY(ucg, x0, y0);
@@ -317,7 +317,7 @@ void ucg_DrawTriangle(ucg_t *ucg, int16_t x0, int16_t y0, int16_t x1, int16_t y1
   ucg_DrawPolygon(ucg);
 }
 
-void ucg_DrawTetragon(ucg_t *ucg, int16_t x0, int16_t y0, int16_t x1, int16_t y1, int16_t x2, int16_t y2, int16_t x3, int16_t y3)
+void ICACHE_FLASH_ATTR ucg_DrawTetragon(ucg_t *ucg, int16_t x0, int16_t y0, int16_t x1, int16_t y1, int16_t x2, int16_t y2, int16_t x3, int16_t y3)
 {
   ucg_ClearPolygonXY();
   ucg_AddPolygonXY(ucg, x0, y0);

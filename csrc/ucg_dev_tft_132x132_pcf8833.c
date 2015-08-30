@@ -126,7 +126,7 @@ static const ucg_pgm_uint8_t ucg_tft_132x132_pcf8833_init_seq[] = {
 };
 
 
-ucg_int_t ucg_dev_pcf8833_16x132x132(ucg_t *ucg, ucg_int_t msg, void *data)
+ucg_int_t ICACHE_FLASH_ATTR ucg_dev_pcf8833_16x132x132(ucg_t *ucg, ucg_int_t msg, void *data)
 {
   switch(msg)
   {

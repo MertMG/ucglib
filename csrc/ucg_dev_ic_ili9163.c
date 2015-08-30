@@ -122,7 +122,7 @@ const ucg_pgm_uint8_t ucg_ili9163_set_pos_dir3_seq[] =
   UCG_END()
 };
 
-ucg_int_t ucg_handle_ili9163_l90fx(ucg_t *ucg)
+ucg_int_t ICACHE_FLASH_ATTR ucg_handle_ili9163_l90fx(ucg_t *ucg)
 {
   uint8_t c[3];
   ucg_int_t tmp;
@@ -173,7 +173,7 @@ ucg_int_t ucg_handle_ili9163_l90fx(ucg_t *ucg)
 */
 
 /* with CmdDataSequence */ 
-ucg_int_t ucg_handle_ili9163_l90tc(ucg_t *ucg)
+ucg_int_t ICACHE_FLASH_ATTR ucg_handle_ili9163_l90tc(ucg_t *ucg)
 {
   if ( ucg_clip_l90tc(ucg) != 0 )
   {
@@ -264,7 +264,7 @@ ucg_int_t ucg_handle_ili9163_l90tc(ucg_t *ucg)
 }
 
 
-ucg_int_t ucg_handle_ili9163_l90se(ucg_t *ucg)
+ucg_int_t ICACHE_FLASH_ATTR ucg_handle_ili9163_l90se(ucg_t *ucg)
 {
   uint8_t i;
   uint8_t c[3];
@@ -336,7 +336,7 @@ static const ucg_pgm_uint8_t ucg_ili9163_power_down_seq[] = {
 };
 
 
-ucg_int_t ucg_dev_ic_ili9163_18(ucg_t *ucg, ucg_int_t msg, void *data)
+ucg_int_t ICACHE_FLASH_ATTR ucg_dev_ic_ili9163_18(ucg_t *ucg, ucg_int_t msg, void *data)
 {
   switch(msg)
   {
@@ -389,7 +389,7 @@ ucg_int_t ucg_dev_ic_ili9163_18(ucg_t *ucg, ucg_int_t msg, void *data)
   return ucg_dev_default_cb(ucg, msg, data);  
 }
 
-ucg_int_t ucg_ext_ili9163_18(ucg_t *ucg, ucg_int_t msg, void *data)
+ucg_int_t ICACHE_FLASH_ATTR ucg_ext_ili9163_18(ucg_t *ucg, ucg_int_t msg, void *data)
 {
   switch(msg)
   {

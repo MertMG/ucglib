@@ -35,7 +35,7 @@
 
 #include "ucg.h"
 
-void ucg_SetColor(ucg_t *ucg, uint8_t idx, uint8_t r, uint8_t g, uint8_t b)
+void ICACHE_FLASH_ATTR ucg_SetColor(ucg_t *ucg, uint8_t idx, uint8_t r, uint8_t g, uint8_t b)
 {
   //ucg->arg.pixel.rgb.color[0] = r;
   //ucg->arg.pixel.rgb.color[1] = g;
@@ -46,7 +46,7 @@ void ucg_SetColor(ucg_t *ucg, uint8_t idx, uint8_t r, uint8_t g, uint8_t b)
 }
 
 
-void ucg_DrawPixel(ucg_t *ucg, ucg_int_t x, ucg_int_t y)
+void ICACHE_FLASH_ATTR ucg_DrawPixel(ucg_t *ucg, ucg_int_t x, ucg_int_t y)
 {
   ucg->arg.pixel.rgb.color[0] = ucg->arg.rgb[0].color[0];
   ucg->arg.pixel.rgb.color[1] = ucg->arg.rgb[0].color[1];

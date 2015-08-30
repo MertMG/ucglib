@@ -103,7 +103,7 @@ static const ucg_pgm_uint8_t ucg_tft_240x320_ili9341_init_seq[] = {
 };
 
 
-ucg_int_t ucg_dev_ili9341_18x240x320(ucg_t *ucg, ucg_int_t msg, void *data)
+ucg_int_t ICACHE_FLASH_ATTR ucg_dev_ili9341_18x240x320(ucg_t *ucg, ucg_int_t msg, void *data)
 {
   switch(msg)
   {

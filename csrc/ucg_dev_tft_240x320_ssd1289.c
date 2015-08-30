@@ -128,7 +128,7 @@ static const ucg_pgm_uint8_t ucg_tft_240x320_ssd1289_init_seq[] = {
   UCG_END(),					/* end of sequence */
 };
 
-ucg_int_t ucg_dev_ssd1289_18x240x320_itdb02(ucg_t *ucg, ucg_int_t msg, void *data)
+ucg_int_t ICACHE_FLASH_ATTR ucg_dev_ssd1289_18x240x320_itdb02(ucg_t *ucg, ucg_int_t msg, void *data)
 {
   switch(msg)
   {

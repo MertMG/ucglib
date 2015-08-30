@@ -197,7 +197,7 @@ static const ucg_pgm_uint8_t ucg_seps255_pos_dir0_seq[] =
   UCG_END()
 };
 
-ucg_int_t ucg_dev_seps225_16x128x128_univision(ucg_t *ucg, ucg_int_t msg, void *data)
+ucg_int_t ICACHE_FLASH_ATTR ucg_dev_seps225_16x128x128_univision(ucg_t *ucg, ucg_int_t msg, void *data)
 {
   switch(msg)
   {

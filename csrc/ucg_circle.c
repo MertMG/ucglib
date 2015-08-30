@@ -37,9 +37,9 @@
 
 #include "ucg.h"
 
-static void ucg_draw_circle_section(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t x0, ucg_int_t y0, uint8_t option) UCG_NOINLINE;
+static void ICACHE_FLASH_ATTR ucg_draw_circle_section(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t x0, ucg_int_t y0, uint8_t option) UCG_NOINLINE;
 
-static void ucg_draw_circle_section(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t x0, ucg_int_t y0, uint8_t option)
+static void ICACHE_FLASH_ATTR ucg_draw_circle_section(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t x0, ucg_int_t y0, uint8_t option)
 {
     /* upper right */
     if ( option & UCG_DRAW_UPPER_RIGHT )
@@ -70,7 +70,7 @@ static void ucg_draw_circle_section(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_in
     }
 }
 
-void ucg_draw_circle(ucg_t *ucg, ucg_int_t x0, ucg_int_t y0, ucg_int_t rad, uint8_t option)
+void ICACHE_FLASH_ATTR ucg_draw_circle(ucg_t *ucg, ucg_int_t x0, ucg_int_t y0, ucg_int_t rad, uint8_t option)
 {
     ucg_int_t f;
     ucg_int_t ddF_x;
@@ -105,7 +105,7 @@ void ucg_draw_circle(ucg_t *ucg, ucg_int_t x0, ucg_int_t y0, ucg_int_t rad, uint
     }
 }
 
-void ucg_DrawCircle(ucg_t *ucg, ucg_int_t x0, ucg_int_t y0, ucg_int_t rad, uint8_t option)
+void ICACHE_FLASH_ATTR ucg_DrawCircle(ucg_t *ucg, ucg_int_t x0, ucg_int_t y0, ucg_int_t rad, uint8_t option)
 {
   /* check for bounding box */
   /*
@@ -126,9 +126,9 @@ void ucg_DrawCircle(ucg_t *ucg, ucg_int_t x0, ucg_int_t y0, ucg_int_t rad, uint8
   ucg_draw_circle(ucg, x0, y0, rad, option);
 }
 
-static void ucg_draw_disc_section(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t x0, ucg_int_t y0, uint8_t option) UCG_NOINLINE;
+static void ICACHE_FLASH_ATTR ucg_draw_disc_section(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t x0, ucg_int_t y0, uint8_t option) UCG_NOINLINE;
 
-static void ucg_draw_disc_section(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t x0, ucg_int_t y0, uint8_t option)
+static void ICACHE_FLASH_ATTR ucg_draw_disc_section(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t x0, ucg_int_t y0, uint8_t option)
 {
     /* upper right */
     if ( option & UCG_DRAW_UPPER_RIGHT )
@@ -159,7 +159,7 @@ static void ucg_draw_disc_section(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_
     }
 }
 
-void ucg_draw_disc(ucg_t *ucg, ucg_int_t x0, ucg_int_t y0, ucg_int_t rad, uint8_t option)
+void ICACHE_FLASH_ATTR ucg_draw_disc(ucg_t *ucg, ucg_int_t x0, ucg_int_t y0, ucg_int_t rad, uint8_t option)
 {
   ucg_int_t f;
   ucg_int_t ddF_x;
@@ -194,7 +194,7 @@ void ucg_draw_disc(ucg_t *ucg, ucg_int_t x0, ucg_int_t y0, ucg_int_t rad, uint8_
   }
 }
 
-void ucg_DrawDisc(ucg_t *ucg, ucg_int_t x0, ucg_int_t y0, ucg_int_t rad, uint8_t option)
+void ICACHE_FLASH_ATTR ucg_DrawDisc(ucg_t *ucg, ucg_int_t x0, ucg_int_t y0, ucg_int_t rad, uint8_t option)
 {
   /* check for bounding box */
   /*

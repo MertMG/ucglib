@@ -41,7 +41,7 @@
   messages, which are not yet handled.
 */
 
-ucg_int_t ucg_dev_default_cb(ucg_t *ucg, ucg_int_t msg, void *data)
+ucg_int_t ICACHE_FLASH_ATTR ucg_dev_default_cb(ucg_t *ucg, ucg_int_t msg, void *data)
 {
   switch(msg)
   {
@@ -57,7 +57,7 @@ ucg_int_t ucg_dev_default_cb(ucg_t *ucg, ucg_int_t msg, void *data)
 /*
   will be used as default cb if no extentions callback is provided
 */
-ucg_int_t ucg_ext_none(ucg_t *ucg, ucg_int_t msg, void *data)
+ucg_int_t ICACHE_FLASH_ATTR ucg_ext_none(ucg_t *ucg, ucg_int_t msg, void *data)
 {
   return 1;	/* all ok */  
 }
@@ -68,7 +68,7 @@ ucg_int_t ucg_ext_none(ucg_t *ucg, ucg_int_t msg, void *data)
   handle UCG_MSG_DRAW_L90FX message and make calls to "dev_cb" with UCG_MSG_DRAW_PIXEL
   return 1 if something has been drawn
 */
-ucg_int_t ucg_handle_l90fx(ucg_t *ucg, ucg_dev_fnptr dev_cb)
+ucg_int_t ICACHE_FLASH_ATTR ucg_handle_l90fx(ucg_t *ucg, ucg_dev_fnptr dev_cb)
 {
   if ( ucg_clip_l90fx(ucg) != 0 )
   {
@@ -98,7 +98,7 @@ ucg_int_t ucg_handle_l90fx(ucg_t *ucg, ucg_dev_fnptr dev_cb)
   handle UCG_MSG_DRAW_L90TC message and make calls to "dev_cb" with UCG_MSG_DRAW_PIXEL
   return 1 if something has been drawn
 */
-ucg_int_t ucg_handle_l90tc(ucg_t *ucg, ucg_dev_fnptr dev_cb)
+ucg_int_t ICACHE_FLASH_ATTR ucg_handle_l90tc(ucg_t *ucg, ucg_dev_fnptr dev_cb)
 {
   if ( ucg_clip_l90tc(ucg) != 0 )
   {
@@ -146,7 +146,7 @@ ucg_int_t ucg_handle_l90tc(ucg_t *ucg, ucg_dev_fnptr dev_cb)
   handle UCG_MSG_DRAW_L90FB message and make calls to "dev_cb" with UCG_MSG_DRAW_PIXEL
   return 1 if something has been drawn
 */
-ucg_int_t ucg_handle_l90bf(ucg_t *ucg, ucg_dev_fnptr dev_cb)
+ucg_int_t ICACHE_FLASH_ATTR ucg_handle_l90bf(ucg_t *ucg, ucg_dev_fnptr dev_cb)
 {
   if ( ucg_clip_l90tc(ucg) != 0 )
   {
@@ -201,7 +201,7 @@ ucg_int_t ucg_handle_l90bf(ucg_t *ucg, ucg_dev_fnptr dev_cb)
   return 1 if something has been drawn
 */
 
-ucg_int_t ucg_handle_l90se(ucg_t *ucg, ucg_dev_fnptr dev_cb)
+ucg_int_t ICACHE_FLASH_ATTR ucg_handle_l90se(ucg_t *ucg, ucg_dev_fnptr dev_cb)
 {
   uint8_t i;
   
@@ -255,7 +255,7 @@ ucg_int_t ucg_handle_l90se(ucg_t *ucg, ucg_dev_fnptr dev_cb)
 */
 
 #ifdef ON_HOLD
-void ucg_handle_l90rl(ucg_t *ucg, ucg_dev_fnptr dev_cb)
+void ICACHE_FLASH_ATTR ucg_handle_l90rl(ucg_t *ucg, ucg_dev_fnptr dev_cb)
 {
   ucg_int_t dx, dy;
   uint8_t i, cnt;

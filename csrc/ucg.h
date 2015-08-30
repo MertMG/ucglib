@@ -104,6 +104,8 @@ extern "C"
 #    define UCG_FONT_SECTION(name)
 #  elif defined(__AVR__)
 #    define UCG_FONT_SECTION(name) UCG_SECTION(".progmem." name)
+#  elif defined(__XTENSA__) && defined(ICACHE_FLASH)
+#    define UCG_FONT_SECTION(name) UCG_SECTION(".irom.text." name)
 #  else
 #    define UCG_FONT_SECTION(name)
 #  endif
@@ -113,11 +115,37 @@ extern "C"
 #  define UCG_FONT_SECTION(name)
 #endif
 
+#if defined(__XTENSA__) && defined(ICACHE_FLASH)
+#  define ICACHE_FLASH_ATTR  UCG_SECTION(".irom0.text")
+#else
+#  define ICACHE_FLASH_ATTR
+#endif
+
 #if defined(__AVR__)
 #include <avr/pgmspace.h>
 /* UCG_PROGMEM is used by the XBM example */
 #define UCG_PROGMEM UCG_SECTION(".progmem.data")
 typedef uint8_t PROGMEM ucg_pgm_uint8_t;
+typedef uint8_t ucg_fntpgm_uint8_t;
+#define ucg_pgm_read(adr) pgm_read_byte_near(adr)
+#define UCG_PSTR(s) ((ucg_pgm_uint8_t *)PSTR(s))
+#elif defined(__XTENSA__) & defined(ICACHE_FLASH)
+//#include <pgmspace.h>  // Can't include this, it's C++-only
+#define PROGMEM ICACHE_RODATA_ATTR
+#define PGM_P  	    const char *
+#define PGM_VOID_P  const void *1
+#define PSTR(s) (__extension__({static const char __c[] PROGMEM = (s); &__c[0];}))
+#define pgm_read_byte_near(addr) 		                                           \
+(__extension__({                                                               \
+    PGM_P __local = (PGM_P)(addr);  /* isolate varible for macro expansion */         \
+    ptrdiff_t __offset = ((uint32_t)__local & 0x00000003); /* byte aligned mask */            \
+    const uint32_t* __addr32 = (const uint32_t*)((const uint8_t*)(__local)-__offset); \
+    uint8_t __result = ((*__addr32) >> (__offset * 8));                        \
+    __result;                                                                  \
+}))
+
+#define UCG_PROGMEM UCG_SECTION(".irom.text.")
+typedef uint8_t ucg_pgm_uint8_t;
 typedef uint8_t ucg_fntpgm_uint8_t;
 #define ucg_pgm_read(adr) pgm_read_byte_near(adr)
 #define UCG_PSTR(s) ((ucg_pgm_uint8_t *)PSTR(s))
@@ -153,17 +181,17 @@ typedef ucg_int_t (*ucg_font_calc_vref_fnptr)(ucg_t *ucg);
 /*================================================*/
 /* list of supported display modules */
 
-ucg_int_t ucg_dev_ssd1351_18x128x128_ilsoft(ucg_t *ucg, ucg_int_t msg, void *data);
-ucg_int_t ucg_dev_ssd1351_18x128x128_ft(ucg_t *ucg, ucg_int_t msg, void *data);
-ucg_int_t ucg_dev_ili9325_18x240x320_itdb02(ucg_t *ucg, ucg_int_t msg, void *data);
-ucg_int_t ucg_dev_ili9325_spi_18x240x320(ucg_t *ucg, ucg_int_t msg, void *data); /*  1 May 2014: Currently, this is not working */
-ucg_int_t ucg_dev_ili9341_18x240x320(ucg_t *ucg, ucg_int_t msg, void *data);
-ucg_int_t ucg_dev_ili9163_18x128x128(ucg_t *ucg, ucg_int_t msg, void *data);
-ucg_int_t ucg_dev_st7735_18x128x160(ucg_t *ucg, ucg_int_t msg, void *data);
-ucg_int_t ucg_dev_pcf8833_16x132x132(ucg_t *ucg, ucg_int_t msg, void *data);
-ucg_int_t ucg_dev_ld50t6160_18x160x128_samsung(ucg_t *ucg, ucg_int_t msg, void *data);
-ucg_int_t ucg_dev_ssd1331_18x96x64_univision(ucg_t *ucg, ucg_int_t msg, void *data);
-ucg_int_t ucg_dev_seps225_16x128x128_univision(ucg_t *ucg, ucg_int_t msg, void *data);
+ucg_int_t ICACHE_FLASH_ATTR ucg_dev_ssd1351_18x128x128_ilsoft(ucg_t *ucg, ucg_int_t msg, void *data);
+ucg_int_t ICACHE_FLASH_ATTR ucg_dev_ssd1351_18x128x128_ft(ucg_t *ucg, ucg_int_t msg, void *data);
+ucg_int_t ICACHE_FLASH_ATTR ucg_dev_ili9325_18x240x320_itdb02(ucg_t *ucg, ucg_int_t msg, void *data);
+ucg_int_t ICACHE_FLASH_ATTR ucg_dev_ili9325_spi_18x240x320(ucg_t *ucg, ucg_int_t msg, void *data); /*  1 May 2014: Currently, this is not working */
+ucg_int_t ICACHE_FLASH_ATTR ucg_dev_ili9341_18x240x320(ucg_t *ucg, ucg_int_t msg, void *data);
+ucg_int_t ICACHE_FLASH_ATTR ucg_dev_ili9163_18x128x128(ucg_t *ucg, ucg_int_t msg, void *data);
+ucg_int_t ICACHE_FLASH_ATTR ucg_dev_st7735_18x128x160(ucg_t *ucg, ucg_int_t msg, void *data);
+ucg_int_t ICACHE_FLASH_ATTR ucg_dev_pcf8833_16x132x132(ucg_t *ucg, ucg_int_t msg, void *data);
+ucg_int_t ICACHE_FLASH_ATTR ucg_dev_ld50t6160_18x160x128_samsung(ucg_t *ucg, ucg_int_t msg, void *data);
+ucg_int_t ICACHE_FLASH_ATTR ucg_dev_ssd1331_18x96x64_univision(ucg_t *ucg, ucg_int_t msg, void *data);
+ucg_int_t ICACHE_FLASH_ATTR ucg_dev_seps225_16x128x128_univision(ucg_t *ucg, ucg_int_t msg, void *data);
 
 
 
@@ -180,33 +208,33 @@ ucg_int_t ucg_dev_seps225_16x128x128_univision(ucg_t *ucg, ucg_int_t msg, void *
     ucg_ext_ssd1351_18
 */
 
-ucg_int_t ucg_ext_none(ucg_t *ucg, ucg_int_t msg, void *data);
+ucg_int_t ICACHE_FLASH_ATTR ucg_ext_none(ucg_t *ucg, ucg_int_t msg, void *data);
 
-ucg_int_t ucg_ext_ssd1351_18(ucg_t *ucg, ucg_int_t msg, void *data);
-ucg_int_t ucg_ext_ili9325_18(ucg_t *ucg, ucg_int_t msg, void *data);
-ucg_int_t ucg_ext_ili9325_spi_18(ucg_t *ucg, ucg_int_t msg, void *data);
-ucg_int_t ucg_ext_ili9341_18(ucg_t *ucg, ucg_int_t msg, void *data);
-ucg_int_t ucg_ext_ili9163_18(ucg_t *ucg, ucg_int_t msg, void *data);
-ucg_int_t ucg_ext_st7735_18(ucg_t *ucg, ucg_int_t msg, void *data);
-ucg_int_t ucg_ext_pcf8833_16(ucg_t *ucg, ucg_int_t msg, void *data);
-ucg_int_t ucg_ext_ld50t6160_18(ucg_t *ucg, ucg_int_t msg, void *data);
-ucg_int_t ucg_ext_ssd1331_18(ucg_t *ucg, ucg_int_t msg, void *data);
-ucg_int_t ucg_ext_seps225_16(ucg_t *ucg, ucg_int_t msg, void *data);
+ucg_int_t ICACHE_FLASH_ATTR ucg_ext_ssd1351_18(ucg_t *ucg, ucg_int_t msg, void *data);
+ucg_int_t ICACHE_FLASH_ATTR ucg_ext_ili9325_18(ucg_t *ucg, ucg_int_t msg, void *data);
+ucg_int_t ICACHE_FLASH_ATTR ucg_ext_ili9325_spi_18(ucg_t *ucg, ucg_int_t msg, void *data);
+ucg_int_t ICACHE_FLASH_ATTR ucg_ext_ili9341_18(ucg_t *ucg, ucg_int_t msg, void *data);
+ucg_int_t ICACHE_FLASH_ATTR ucg_ext_ili9163_18(ucg_t *ucg, ucg_int_t msg, void *data);
+ucg_int_t ICACHE_FLASH_ATTR ucg_ext_st7735_18(ucg_t *ucg, ucg_int_t msg, void *data);
+ucg_int_t ICACHE_FLASH_ATTR ucg_ext_pcf8833_16(ucg_t *ucg, ucg_int_t msg, void *data);
+ucg_int_t ICACHE_FLASH_ATTR ucg_ext_ld50t6160_18(ucg_t *ucg, ucg_int_t msg, void *data);
+ucg_int_t ICACHE_FLASH_ATTR ucg_ext_ssd1331_18(ucg_t *ucg, ucg_int_t msg, void *data);
+ucg_int_t ICACHE_FLASH_ATTR ucg_ext_seps225_16(ucg_t *ucg, ucg_int_t msg, void *data);
 
 
 /*================================================*/
 /* list of supported display controllers */
 
-ucg_int_t ucg_dev_ic_ssd1351_18(ucg_t *ucg, ucg_int_t msg, void *data);
-ucg_int_t ucg_dev_ic_ili9325_18(ucg_t *ucg, ucg_int_t msg, void *data);
-ucg_int_t ucg_dev_ic_ili9325_spi_18(ucg_t *ucg, ucg_int_t msg, void *data);
-ucg_int_t ucg_dev_ic_ili9341_18(ucg_t *ucg, ucg_int_t msg, void *data);
-ucg_int_t ucg_dev_ic_ili9163_18(ucg_t *ucg, ucg_int_t msg, void *data);
-ucg_int_t ucg_dev_ic_st7735_18(ucg_t *ucg, ucg_int_t msg, void *data);
-ucg_int_t ucg_dev_ic_pcf8833_16(ucg_t *ucg, ucg_int_t msg, void *data);
-ucg_int_t ucg_dev_ic_ld50t6160_18(ucg_t *ucg, ucg_int_t msg, void *data);
-ucg_int_t ucg_dev_ic_ssd1331_18(ucg_t *ucg, ucg_int_t msg, void *data);   /* actually this display only has 65k colors */
-ucg_int_t ucg_dev_ic_seps225_16(ucg_t *ucg, ucg_int_t msg, void *data);   /* this display could do 262k colors, but only 65k are supported via SPI */
+ucg_int_t ICACHE_FLASH_ATTR ucg_dev_ic_ssd1351_18(ucg_t *ucg, ucg_int_t msg, void *data);
+ucg_int_t ICACHE_FLASH_ATTR ucg_dev_ic_ili9325_18(ucg_t *ucg, ucg_int_t msg, void *data);
+ucg_int_t ICACHE_FLASH_ATTR ucg_dev_ic_ili9325_spi_18(ucg_t *ucg, ucg_int_t msg, void *data);
+ucg_int_t ICACHE_FLASH_ATTR ucg_dev_ic_ili9341_18(ucg_t *ucg, ucg_int_t msg, void *data);
+ucg_int_t ICACHE_FLASH_ATTR ucg_dev_ic_ili9163_18(ucg_t *ucg, ucg_int_t msg, void *data);
+ucg_int_t ICACHE_FLASH_ATTR ucg_dev_ic_st7735_18(ucg_t *ucg, ucg_int_t msg, void *data);
+ucg_int_t ICACHE_FLASH_ATTR ucg_dev_ic_pcf8833_16(ucg_t *ucg, ucg_int_t msg, void *data);
+ucg_int_t ICACHE_FLASH_ATTR ucg_dev_ic_ld50t6160_18(ucg_t *ucg, ucg_int_t msg, void *data);
+ucg_int_t ICACHE_FLASH_ATTR ucg_dev_ic_ssd1331_18(ucg_t *ucg, ucg_int_t msg, void *data);   /* actually this display only has 65k colors */
+ucg_int_t ICACHE_FLASH_ATTR ucg_dev_ic_seps225_16(ucg_t *ucg, ucg_int_t msg, void *data);   /* this display could do 262k colors, but only 65k are supported via SPI */
 
 
 /*================================================*/
@@ -547,52 +575,52 @@ extern uint8_t global_SREG_backup;	/* ucg_init.c */
 
 /*================================================*/
 /* ucg_dev_msg_api.c */
-void ucg_PowerDown(ucg_t *ucg);
-ucg_int_t ucg_PowerUp(ucg_t *ucg);
-void ucg_SetClipBox(ucg_t *ucg, ucg_box_t *clip_box);
-void ucg_SetClipRange(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t w, ucg_int_t h);
-void ucg_SetMaxClipRange(ucg_t *ucg);
-void ucg_GetDimension(ucg_t *ucg);
-void ucg_DrawPixelWithArg(ucg_t *ucg);
-void ucg_DrawL90FXWithArg(ucg_t *ucg);
-void ucg_DrawL90TCWithArg(ucg_t *ucg);
-void ucg_DrawL90BFWithArg(ucg_t *ucg);
-void ucg_DrawL90SEWithArg(ucg_t *ucg);
+void ICACHE_FLASH_ATTR ucg_PowerDown(ucg_t *ucg);
+ucg_int_t ICACHE_FLASH_ATTR ucg_PowerUp(ucg_t *ucg);
+void ICACHE_FLASH_ATTR ucg_SetClipBox(ucg_t *ucg, ucg_box_t *clip_box);
+void ICACHE_FLASH_ATTR ucg_SetClipRange(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t w, ucg_int_t h);
+void ICACHE_FLASH_ATTR ucg_SetMaxClipRange(ucg_t *ucg);
+void ICACHE_FLASH_ATTR ucg_GetDimension(ucg_t *ucg);
+void ICACHE_FLASH_ATTR ucg_DrawPixelWithArg(ucg_t *ucg);
+void ICACHE_FLASH_ATTR ucg_DrawL90FXWithArg(ucg_t *ucg);
+void ICACHE_FLASH_ATTR ucg_DrawL90TCWithArg(ucg_t *ucg);
+void ICACHE_FLASH_ATTR ucg_DrawL90BFWithArg(ucg_t *ucg);
+void ICACHE_FLASH_ATTR ucg_DrawL90SEWithArg(ucg_t *ucg);
 /* void ucg_DrawL90RLWithArg(ucg_t *ucg); */
 
 /*================================================*/
 /* ucg_init.c */
-ucg_int_t ucg_Init(ucg_t *ucg, ucg_dev_fnptr device_cb, ucg_dev_fnptr ext_cb, ucg_com_fnptr com_cb);
+ucg_int_t ICACHE_FLASH_ATTR ucg_Init(ucg_t *ucg, ucg_dev_fnptr device_cb, ucg_dev_fnptr ext_cb, ucg_com_fnptr com_cb);
 
 
 /*================================================*/
 /* ucg_dev_sdl.c */
-ucg_int_t ucg_sdl_dev_cb(ucg_t *ucg, ucg_int_t msg, void *data);
+ucg_int_t ICACHE_FLASH_ATTR ucg_sdl_dev_cb(ucg_t *ucg, ucg_int_t msg, void *data);
 
 /*================================================*/
 /* ucg_pixel.c */
-void ucg_SetColor(ucg_t *ucg, uint8_t idx, uint8_t r, uint8_t g, uint8_t b);
-void ucg_DrawPixel(ucg_t *ucg, ucg_int_t x, ucg_int_t y);
+void ICACHE_FLASH_ATTR ucg_SetColor(ucg_t *ucg, uint8_t idx, uint8_t r, uint8_t g, uint8_t b);
+void ICACHE_FLASH_ATTR ucg_DrawPixel(ucg_t *ucg, ucg_int_t x, ucg_int_t y);
 
 /*================================================*/
 /* ucg_line.c */
-void ucg_Draw90Line(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t len, ucg_int_t dir, ucg_int_t col_idx);
-void ucg_DrawHLine(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t len);
-void ucg_DrawVLine(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t len);
-void ucg_DrawHRLine(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t len);
-void ucg_DrawLine(ucg_t *ucg, ucg_int_t x1, ucg_int_t y1, ucg_int_t x2, ucg_int_t y2);
+void ICACHE_FLASH_ATTR ucg_Draw90Line(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t len, ucg_int_t dir, ucg_int_t col_idx);
+void ICACHE_FLASH_ATTR ucg_DrawHLine(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t len);
+void ICACHE_FLASH_ATTR ucg_DrawVLine(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t len);
+void ICACHE_FLASH_ATTR ucg_DrawHRLine(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t len);
+void ICACHE_FLASH_ATTR ucg_DrawLine(ucg_t *ucg, ucg_int_t x1, ucg_int_t y1, ucg_int_t x2, ucg_int_t y2);
 /* the following procedure is only available with the extended callback */
-void ucg_DrawGradientLine(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t len, ucg_int_t dir);
+void ICACHE_FLASH_ATTR ucg_DrawGradientLine(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t len, ucg_int_t dir);
 
 
 /*================================================*/
 /* ucg_box.c */
-void ucg_DrawBox(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t w, ucg_int_t h);
-void ucg_ClearScreen(ucg_t *ucg);
-void ucg_DrawRBox(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t w, ucg_int_t h, ucg_int_t r);
-void ucg_DrawGradientBox(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t w, ucg_int_t h);
-void ucg_DrawFrame(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t w, ucg_int_t h);
-void ucg_DrawRFrame(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t w, ucg_int_t h, ucg_int_t r);
+void ICACHE_FLASH_ATTR ucg_DrawBox(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t w, ucg_int_t h);
+void ICACHE_FLASH_ATTR ucg_ClearScreen(ucg_t *ucg);
+void ICACHE_FLASH_ATTR ucg_DrawRBox(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t w, ucg_int_t h, ucg_int_t r);
+void ICACHE_FLASH_ATTR ucg_DrawGradientBox(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t w, ucg_int_t h);
+void ICACHE_FLASH_ATTR ucg_DrawFrame(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t w, ucg_int_t h);
+void ICACHE_FLASH_ATTR ucg_DrawRFrame(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t w, ucg_int_t h, ucg_int_t r);
 
 
 /*================================================*/
@@ -602,27 +630,27 @@ void ucg_DrawRFrame(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t w, ucg_int_t
 #define UCG_DRAW_LOWER_LEFT 0x04
 #define UCG_DRAW_LOWER_RIGHT  0x08
 #define UCG_DRAW_ALL (UCG_DRAW_UPPER_RIGHT|UCG_DRAW_UPPER_LEFT|UCG_DRAW_LOWER_RIGHT|UCG_DRAW_LOWER_LEFT)
-void ucg_DrawDisc(ucg_t *ucg, ucg_int_t x0, ucg_int_t y0, ucg_int_t rad, uint8_t option);
-void ucg_DrawCircle(ucg_t *ucg, ucg_int_t x0, ucg_int_t y0, ucg_int_t rad, uint8_t option);
+void ICACHE_FLASH_ATTR ucg_DrawDisc(ucg_t *ucg, ucg_int_t x0, ucg_int_t y0, ucg_int_t rad, uint8_t option);
+void ICACHE_FLASH_ATTR ucg_DrawCircle(ucg_t *ucg, ucg_int_t x0, ucg_int_t y0, ucg_int_t rad, uint8_t option);
 
 /*================================================*/
 /* ucg_bitmap.c */
-void ucg_DrawTransparentBitmapLine(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t dir, ucg_int_t len, const unsigned char *bitmap);
-void ucg_DrawBitmapLine(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t dir, ucg_int_t len, const unsigned char *bitmap);
-/* void ucg_DrawRLBitmap(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t dir, const unsigned char *rl_bitmap); */
+void ICACHE_FLASH_ATTR ucg_DrawTransparentBitmapLine(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t dir, ucg_int_t len, const unsigned char *bitmap);
+void ICACHE_FLASH_ATTR ucg_DrawBitmapLine(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t dir, ucg_int_t len, const unsigned char *bitmap);
+/* void ICACHE_FLASH_ATTR ucg_DrawRLBitmap(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t dir, const unsigned char *rl_bitmap); */
 
 
 /*================================================*/
 /* ucg_rotate.c */
-void ucg_UndoRotate(ucg_t *ucg);
-void ucg_SetRotate90(ucg_t *ucg);
-void ucg_SetRotate180(ucg_t *ucg);
-void ucg_SetRotate270(ucg_t *ucg);
+void ICACHE_FLASH_ATTR ucg_UndoRotate(ucg_t *ucg);
+void ICACHE_FLASH_ATTR ucg_SetRotate90(ucg_t *ucg);
+void ICACHE_FLASH_ATTR ucg_SetRotate180(ucg_t *ucg);
+void ICACHE_FLASH_ATTR ucg_SetRotate270(ucg_t *ucg);
 
 /*================================================*/
 /* ucg_scale.c */
-void ucg_UndoScale(ucg_t *ucg);
-void ucg_SetScale2x2(ucg_t *ucg);
+void ICACHE_FLASH_ATTR ucg_UndoScale(ucg_t *ucg);
+void ICACHE_FLASH_ATTR ucg_SetScale2x2(ucg_t *ucg);
 
 
 /*================================================*/
@@ -676,15 +704,15 @@ struct _pg_struct
   struct pg_edge_struct pge[2];	/* left and right line draw structures */
 };
 
-void pg_ClearPolygonXY(pg_struct *pg);
-void pg_AddPolygonXY(pg_struct *pg, ucg_t *ucg, int16_t x, int16_t y);
-void pg_DrawPolygon(pg_struct *pg, ucg_t *ucg);
-void ucg_ClearPolygonXY(void);
-void ucg_AddPolygonXY(ucg_t *ucg, int16_t x, int16_t y);
-void ucg_DrawPolygon(ucg_t *ucg);
-void ucg_DrawTriangle(ucg_t *ucg, int16_t x0, int16_t y0, int16_t x1, int16_t y1, int16_t x2, int16_t y2);
+void ICACHE_FLASH_ATTR pg_ClearPolygonXY(pg_struct *pg);
+void ICACHE_FLASH_ATTR pg_AddPolygonXY(pg_struct *pg, ucg_t *ucg, int16_t x, int16_t y);
+void ICACHE_FLASH_ATTR pg_DrawPolygon(pg_struct *pg, ucg_t *ucg);
+void ICACHE_FLASH_ATTR ucg_ClearPolygonXY(void);
+void ICACHE_FLASH_ATTR ucg_AddPolygonXY(ucg_t *ucg, int16_t x, int16_t y);
+void ICACHE_FLASH_ATTR ucg_DrawPolygon(ucg_t *ucg);
+void ICACHE_FLASH_ATTR ucg_DrawTriangle(ucg_t *ucg, int16_t x0, int16_t y0, int16_t x1, int16_t y1, int16_t x2, int16_t y2);
 /* the polygon procedure only works for convex tetragons (http://en.wikipedia.org/wiki/Convex_polygon) */
-void ucg_DrawTetragon(ucg_t *ucg, int16_t x0, int16_t y0, int16_t x1, int16_t y1, int16_t x2, int16_t y2, int16_t x3, int16_t y3);
+void ICACHE_FLASH_ATTR ucg_DrawTetragon(ucg_t *ucg, int16_t x0, int16_t y0, int16_t x1, int16_t y1, int16_t x2, int16_t y2, int16_t x3, int16_t y3);
 
 
 /*================================================*/
@@ -705,49 +733,49 @@ void ucg_DrawTetragon(ucg_t *ucg, int16_t x0, int16_t y0, int16_t x1, int16_t y1
 
 
 /* Information on a specific given font */
-uint8_t ucg_font_GetFontStartEncoding(const void *font);
-uint8_t ucg_font_GetFontEndEncoding(const void *font);
+uint8_t ICACHE_FLASH_ATTR ucg_font_GetFontStartEncoding(const void *font);
+uint8_t ICACHE_FLASH_ATTR ucg_font_GetFontEndEncoding(const void *font);
 
-uint8_t ucg_font_GetCapitalAHeight(const void *font);
+uint8_t ICACHE_FLASH_ATTR ucg_font_GetCapitalAHeight(const void *font);
 
-int8_t ucg_font_GetFontAscent(const void *font);
-int8_t ucg_font_GetFontDescent(const void *font);
+int8_t ICACHE_FLASH_ATTR ucg_font_GetFontAscent(const void *font);
+int8_t ICACHE_FLASH_ATTR ucg_font_GetFontDescent(const void *font);
 
-int8_t ucg_font_GetFontXAscent(const void *font);
-int8_t ucg_font_GetFontXDescent(const void *font);
+int8_t ICACHE_FLASH_ATTR ucg_font_GetFontXAscent(const void *font);
+int8_t ICACHE_FLASH_ATTR ucg_font_GetFontXDescent(const void *font);
 
-size_t ucg_font_GetSize(const void *font);
+size_t ICACHE_FLASH_ATTR ucg_font_GetSize(const void *font);
 
 /* Information on the current font */
 
-uint8_t ucg_GetFontBBXWidth(ucg_t *ucg);
-uint8_t ucg_GetFontBBXHeight(ucg_t *ucg);
-uint8_t ucg_GetFontCapitalAHeight(ucg_t *ucg) UCG_NOINLINE; 
-uint8_t ucg_IsGlyph(ucg_t *ucg, uint8_t requested_encoding);
-int8_t ucg_GetGlyphWidth(ucg_t *ucg, uint8_t requested_encoding);
+uint8_t ICACHE_FLASH_ATTR ucg_GetFontBBXWidth(ucg_t *ucg);
+uint8_t ICACHE_FLASH_ATTR ucg_GetFontBBXHeight(ucg_t *ucg);
+uint8_t ICACHE_FLASH_ATTR ucg_GetFontCapitalAHeight(ucg_t *ucg) UCG_NOINLINE; 
+uint8_t ICACHE_FLASH_ATTR ucg_IsGlyph(ucg_t *ucg, uint8_t requested_encoding);
+int8_t ICACHE_FLASH_ATTR ucg_GetGlyphWidth(ucg_t *ucg, uint8_t requested_encoding);
 
 #define ucg_GetFontAscent(ucg)	((ucg)->font_ref_ascent)
 #define ucg_GetFontDescent(ucg)	((ucg)->font_ref_descent)
 
 /* Drawing procedures */
 
-ucg_int_t ucg_DrawGlyph(ucg_t *ucg, ucg_int_t x, ucg_int_t y, uint8_t dir, uint8_t encoding);
-ucg_int_t ucg_DrawString(ucg_t *ucg, ucg_int_t x, ucg_int_t y, uint8_t dir, const char *str);
+ucg_int_t ICACHE_FLASH_ATTR ucg_DrawGlyph(ucg_t *ucg, ucg_int_t x, ucg_int_t y, uint8_t dir, uint8_t encoding);
+ucg_int_t ICACHE_FLASH_ATTR ucg_DrawString(ucg_t *ucg, ucg_int_t x, ucg_int_t y, uint8_t dir, const char *str);
 
 /* Mode selection/Font assignment */
 
-void ucg_SetFontRefHeightText(ucg_t *ucg);
-void ucg_SetFontRefHeightExtendedText(ucg_t *ucg);
-void ucg_SetFontRefHeightAll(ucg_t *ucg);
+void ICACHE_FLASH_ATTR ucg_SetFontRefHeightText(ucg_t *ucg);
+void ICACHE_FLASH_ATTR ucg_SetFontRefHeightExtendedText(ucg_t *ucg);
+void ICACHE_FLASH_ATTR ucg_SetFontRefHeightAll(ucg_t *ucg);
 
-void ucg_SetFontPosBaseline(ucg_t *ucg) UCG_NOINLINE;
-void ucg_SetFontPosBottom(ucg_t *ucg);
-void ucg_SetFontPosTop(ucg_t *ucg);
-void ucg_SetFontPosCenter(ucg_t *ucg);
+void ICACHE_FLASH_ATTR ucg_SetFontPosBaseline(ucg_t *ucg) UCG_NOINLINE;
+void ICACHE_FLASH_ATTR ucg_SetFontPosBottom(ucg_t *ucg);
+void ICACHE_FLASH_ATTR ucg_SetFontPosTop(ucg_t *ucg);
+void ICACHE_FLASH_ATTR ucg_SetFontPosCenter(ucg_t *ucg);
 
-void ucg_SetFont(ucg_t *ucg, const ucg_fntpgm_uint8_t  *font);
-//void ucg_SetFontMode(ucg_t *ucg, ucg_font_mode_fnptr font_mode);
-void ucg_SetFontMode(ucg_t *ucg, uint8_t is_transparent);
+void ICACHE_FLASH_ATTR ucg_SetFont(ucg_t *ucg, const ucg_fntpgm_uint8_t  *font);
+//void ICACHE_FLASH_ATTR ucg_SetFontMode(ucg_t *ucg, ucg_font_mode_fnptr font_mode);
+void ICACHE_FLASH_ATTR ucg_SetFontMode(ucg_t *ucg, uint8_t is_transparent);
 
 ucg_int_t ucg_GetStrWidth(ucg_t *ucg, const char *s);
 
@@ -757,27 +785,27 @@ ucg_int_t ucg_GetStrWidth(ucg_t *ucg, const char *s);
 
 /*================================================*/
 /* ucg_clip.c */
-ucg_int_t ucg_clip_is_pixel_visible(ucg_t *ucg);
-ucg_int_t ucg_clip_l90fx(ucg_t *ucg);
-ucg_int_t ucg_clip_l90tc(ucg_t *ucg);
-ucg_int_t ucg_clip_l90se(ucg_t *ucg);
+ucg_int_t ICACHE_FLASH_ATTR ucg_clip_is_pixel_visible(ucg_t *ucg);
+ucg_int_t ICACHE_FLASH_ATTR ucg_clip_l90fx(ucg_t *ucg);
+ucg_int_t ICACHE_FLASH_ATTR ucg_clip_l90tc(ucg_t *ucg);
+ucg_int_t ICACHE_FLASH_ATTR ucg_clip_l90se(ucg_t *ucg);
 
 
 /*================================================*/
 /* ucg_ccs.c */
-void ucg_ccs_init(ucg_ccs_t *ccs, uint8_t start, uint8_t end, ucg_int_t steps);
-void ucg_ccs_step(ucg_ccs_t *ccs);
-void ucg_ccs_seek(ucg_ccs_t *ccs, ucg_int_t pos);
+void ICACHE_FLASH_ATTR ucg_ccs_init(ucg_ccs_t *ccs, uint8_t start, uint8_t end, ucg_int_t steps);
+void ICACHE_FLASH_ATTR ucg_ccs_step(ucg_ccs_t *ccs);
+void ICACHE_FLASH_ATTR ucg_ccs_seek(ucg_ccs_t *ccs, ucg_int_t pos);
 
 
 /*================================================*/
 /* ucg_dev_default_cb.c */
-ucg_int_t ucg_dev_default_cb(ucg_t *ucg, ucg_int_t msg, void *data);
-ucg_int_t ucg_handle_l90fx(ucg_t *ucg, ucg_dev_fnptr dev_cb);
-ucg_int_t ucg_handle_l90tc(ucg_t *ucg, ucg_dev_fnptr dev_cb);
-ucg_int_t ucg_handle_l90se(ucg_t *ucg, ucg_dev_fnptr dev_cb);
-ucg_int_t ucg_handle_l90bf(ucg_t *ucg, ucg_dev_fnptr dev_cb);
-void ucg_handle_l90rl(ucg_t *ucg, ucg_dev_fnptr dev_cb);
+ucg_int_t ICACHE_FLASH_ATTR ucg_dev_default_cb(ucg_t *ucg, ucg_int_t msg, void *data);
+ucg_int_t ICACHE_FLASH_ATTR ucg_handle_l90fx(ucg_t *ucg, ucg_dev_fnptr dev_cb);
+ucg_int_t ICACHE_FLASH_ATTR ucg_handle_l90tc(ucg_t *ucg, ucg_dev_fnptr dev_cb);
+ucg_int_t ICACHE_FLASH_ATTR ucg_handle_l90se(ucg_t *ucg, ucg_dev_fnptr dev_cb);
+ucg_int_t ICACHE_FLASH_ATTR ucg_handle_l90bf(ucg_t *ucg, ucg_dev_fnptr dev_cb);
+void ICACHE_FLASH_ATTR ucg_handle_l90rl(ucg_t *ucg, ucg_dev_fnptr dev_cb);
 
 
 /*================================================*/
@@ -843,33 +871,33 @@ void ucg_handle_l90rl(ucg_t *ucg, ucg_dev_fnptr dev_cb);
 #define ucg_com_SendRepeat3Bytes(ucg, cnt, byte_ptr) \
   (ucg)->com_cb((ucg), UCG_COM_MSG_REPEAT_3_BYTES, (cnt), (byte_ptr))
 
-void ucg_com_PowerDown(ucg_t *ucg);
-int16_t ucg_com_PowerUp(ucg_t *ucg, uint16_t serial_clk_speed, uint16_t parallel_clk_speed);  /* values are nano seconds */
-void ucg_com_SetLineStatus(ucg_t *ucg, uint8_t level, uint8_t mask, uint8_t msg) UCG_NOINLINE;
-void ucg_com_SetResetLineStatus(ucg_t *ucg, uint8_t level);
-void ucg_com_SetCSLineStatus(ucg_t *ucg, uint8_t level);
-void ucg_com_SetCDLineStatus(ucg_t *ucg, uint8_t level);
-void ucg_com_DelayMicroseconds(ucg_t *ucg, uint16_t delay) UCG_NOINLINE;
-void ucg_com_DelayMilliseconds(ucg_t *ucg, uint16_t delay) UCG_NOINLINE;
+void ICACHE_FLASH_ATTR ucg_com_PowerDown(ucg_t *ucg);
+int16_t ICACHE_FLASH_ATTR ucg_com_PowerUp(ucg_t *ucg, uint16_t serial_clk_speed, uint16_t parallel_clk_speed);  /* values are nano seconds */
+void ICACHE_FLASH_ATTR ucg_com_SetLineStatus(ucg_t *ucg, uint8_t level, uint8_t mask, uint8_t msg) UCG_NOINLINE;
+void ICACHE_FLASH_ATTR ucg_com_SetResetLineStatus(ucg_t *ucg, uint8_t level);
+void ICACHE_FLASH_ATTR ucg_com_SetCSLineStatus(ucg_t *ucg, uint8_t level);
+void ICACHE_FLASH_ATTR ucg_com_SetCDLineStatus(ucg_t *ucg, uint8_t level);
+void ICACHE_FLASH_ATTR ucg_com_DelayMicroseconds(ucg_t *ucg, uint16_t delay) UCG_NOINLINE;
+void ICACHE_FLASH_ATTR ucg_com_DelayMilliseconds(ucg_t *ucg, uint16_t delay) UCG_NOINLINE;
 #ifndef ucg_com_SendByte
-void ucg_com_SendByte(ucg_t *ucg, uint8_t byte);
+void ICACHE_FLASH_ATTR ucg_com_SendByte(ucg_t *ucg, uint8_t byte);
 #endif
-void ucg_com_SendRepeatByte(ucg_t *ucg, uint16_t cnt, uint8_t byte);
-void ucg_com_SendRepeat2Bytes(ucg_t *ucg, uint16_t cnt, uint8_t *byte_ptr);
+void ICACHE_FLASH_ATTR ucg_com_SendRepeatByte(ucg_t *ucg, uint16_t cnt, uint8_t byte);
+void ICACHE_FLASH_ATTR ucg_com_SendRepeat2Bytes(ucg_t *ucg, uint16_t cnt, uint8_t *byte_ptr);
 #ifndef ucg_com_SendRepeat3Bytes
-void ucg_com_SendRepeat3Bytes(ucg_t *ucg, uint16_t cnt, uint8_t *byte_ptr);
+void ICACHE_FLASH_ATTR ucg_com_SendRepeat3Bytes(ucg_t *ucg, uint16_t cnt, uint8_t *byte_ptr);
 #endif
-void ucg_com_SendString(ucg_t *ucg, uint16_t cnt, const uint8_t *byte_ptr);
-void ucg_com_SendCmdDataSequence(ucg_t *ucg, uint16_t cnt, const uint8_t *byte_ptr, uint8_t cd_line_status_at_end);
-void ucg_com_SendCmdSeq(ucg_t *ucg, const ucg_pgm_uint8_t *data);
+void ICACHE_FLASH_ATTR ucg_com_SendString(ucg_t *ucg, uint16_t cnt, const uint8_t *byte_ptr);
+void ICACHE_FLASH_ATTR ucg_com_SendCmdDataSequence(ucg_t *ucg, uint16_t cnt, const uint8_t *byte_ptr, uint8_t cd_line_status_at_end);
+void ICACHE_FLASH_ATTR ucg_com_SendCmdSeq(ucg_t *ucg, const ucg_pgm_uint8_t *data);
 
 
 /*================================================*/
 /* ucg_dev_tga.c */
-int tga_init(uint16_t w, uint16_t h);
-void tga_save(const char *name);
+int ICACHE_FLASH_ATTR tga_init(uint16_t w, uint16_t h);
+void ICACHE_FLASH_ATTR tga_save(const char *name);
 
-ucg_int_t ucg_dev_tga(ucg_t *ucg, ucg_int_t msg, void *data);
+ucg_int_t ICACHE_FLASH_ATTR ucg_dev_tga(ucg_t *ucg, ucg_int_t msg, void *data);
 
 
 

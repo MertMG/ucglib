@@ -42,7 +42,7 @@ uint8_t global_SREG_backup;		// used by the atomic macros
 #endif
 
 
-void ucg_init_struct(ucg_t *ucg)
+void ICACHE_FLASH_ATTR ucg_init_struct(ucg_t *ucg)
 {
   //memset(ucg, 0, sizeof(ucg_t));
   ucg->is_power_up = 0;
@@ -60,7 +60,7 @@ void ucg_init_struct(ucg_t *ucg)
 }
 
 
-ucg_int_t ucg_Init(ucg_t *ucg, ucg_dev_fnptr device_cb, ucg_dev_fnptr ext_cb, ucg_com_fnptr com_cb)
+ucg_int_t ICACHE_FLASH_ATTR ucg_Init(ucg_t *ucg, ucg_dev_fnptr device_cb, ucg_dev_fnptr ext_cb, ucg_com_fnptr com_cb)
 {
   ucg_int_t r;
   ucg_init_struct(ucg);

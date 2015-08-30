@@ -37,10 +37,10 @@
 
 #include "ucg.h"
 
-static ucg_int_t ucg_clip_is_x_visible(ucg_t *ucg) UCG_NOINLINE;
-static ucg_int_t ucg_clip_is_y_visible(ucg_t *ucg) UCG_NOINLINE;
+static ucg_int_t ICACHE_FLASH_ATTR ucg_clip_is_x_visible(ucg_t *ucg) UCG_NOINLINE;
+static ucg_int_t ICACHE_FLASH_ATTR ucg_clip_is_y_visible(ucg_t *ucg) UCG_NOINLINE;
 
-static ucg_int_t ucg_clip_is_x_visible(ucg_t *ucg)
+static ucg_int_t ICACHE_FLASH_ATTR ucg_clip_is_x_visible(ucg_t *ucg)
 {
   ucg_int_t t;
   t = ucg->arg.pixel.pos.x;
@@ -53,7 +53,7 @@ static ucg_int_t ucg_clip_is_x_visible(ucg_t *ucg)
   return 1;
 }
 
-static ucg_int_t ucg_clip_is_y_visible(ucg_t *ucg)
+static ucg_int_t ICACHE_FLASH_ATTR ucg_clip_is_y_visible(ucg_t *ucg)
 {
   ucg_int_t t;
   t = ucg->arg.pixel.pos.y;
@@ -73,7 +73,7 @@ static ucg_int_t ucg_clip_is_y_visible(ucg_t *ucg)
     a <= b
     c <= d
 */
-static ucg_int_t ucg_clip_intersection(ucg_int_t *ap, ucg_int_t *bp, ucg_int_t c, ucg_int_t d)
+static ucg_int_t ICACHE_FLASH_ATTR ucg_clip_intersection(ucg_int_t *ap, ucg_int_t *bp, ucg_int_t c, ucg_int_t d)
 {
   ucg_int_t a = *ap;
   ucg_int_t b = *bp;
@@ -89,7 +89,7 @@ static ucg_int_t ucg_clip_intersection(ucg_int_t *ap, ucg_int_t *bp, ucg_int_t c
   return 1;
 }
 
-ucg_int_t ucg_clip_is_pixel_visible(ucg_t *ucg)
+ucg_int_t ICACHE_FLASH_ATTR ucg_clip_is_pixel_visible(ucg_t *ucg)
 {
   if ( ucg_clip_is_x_visible(ucg) == 0 )
     return 0;
@@ -104,7 +104,7 @@ ucg_int_t ucg_clip_is_pixel_visible(ucg_t *ucg)
   assumes, that ucg->arg contains data for l90fx and does clipping 
   against ucg->clip_box
 */
-ucg_int_t ucg_clip_l90fx(ucg_t *ucg)
+ucg_int_t ICACHE_FLASH_ATTR ucg_clip_l90fx(ucg_t *ucg)
 {
   ucg_int_t a;
   ucg_int_t b;
@@ -192,7 +192,7 @@ ucg_int_t ucg_clip_l90fx(ucg_t *ucg)
   return 1;
 }
 
-ucg_int_t ucg_clip_l90tc(ucg_t *ucg)
+ucg_int_t ICACHE_FLASH_ATTR ucg_clip_l90tc(ucg_t *ucg)
 {
   if ( ucg_clip_l90fx(ucg) == 0 )
       return 0;
@@ -202,7 +202,7 @@ ucg_int_t ucg_clip_l90tc(ucg_t *ucg)
 }
 
 /* old code
-ucg_int_t ucg_clip_l90tc(ucg_t *ucg)
+ucg_int_t ICACHE_FLASH_ATTR ucg_clip_l90tc(ucg_t *ucg)
 {
   ucg_int_t t;
   switch(ucg->arg.dir)
@@ -238,7 +238,7 @@ ucg_int_t ucg_clip_l90tc(ucg_t *ucg)
 }
 */
 
-ucg_int_t ucg_clip_l90se(ucg_t *ucg)
+ucg_int_t ICACHE_FLASH_ATTR ucg_clip_l90se(ucg_t *ucg)
 {
   uint8_t i;
   if ( ucg_clip_l90fx(ucg) == 0 )

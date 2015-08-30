@@ -35,7 +35,7 @@
 
 #include "ucg.h"
 
-int16_t ucg_com_template_cb(ucg_t *ucg, int16_t msg, uint32_t arg, uint8_t *data)
+int16_t ICACHE_FLASH_ATTR ucg_com_template_cb(ucg_t *ucg, int16_t msg, uint32_t arg, uint8_t *data)
 {
   switch(msg)
   {
@@ -68,7 +68,7 @@ int16_t ucg_com_template_cb(ucg_t *ucg, int16_t msg, uint32_t arg, uint8_t *data
 }
 
 
-void ucg_com_PowerDown(ucg_t *ucg)
+void ICACHE_FLASH_ATTR ucg_com_PowerDown(ucg_t *ucg)
 {
   if ( (ucg->com_status & UCG_COM_STATUS_MASK_POWER) != 0 )
     ucg->com_cb(ucg, UCG_COM_MSG_POWER_DOWN, 0, NULL);
@@ -78,7 +78,7 @@ void ucg_com_PowerDown(ucg_t *ucg)
 /*
   clk_speed in nano-seconds, range: 0..4095
 */
-int16_t ucg_com_PowerUp(ucg_t *ucg, uint16_t serial_clk_speed, uint16_t parallel_clk_speed)
+int16_t ICACHE_FLASH_ATTR ucg_com_PowerUp(ucg_t *ucg, uint16_t serial_clk_speed, uint16_t parallel_clk_speed)
 {
   int16_t r;
   ucg_com_info_t com_info;
@@ -95,7 +95,7 @@ int16_t ucg_com_PowerUp(ucg_t *ucg, uint16_t serial_clk_speed, uint16_t parallel
   return r;
 }
 
-void ucg_com_SetLineStatus(ucg_t *ucg, uint8_t level, uint8_t mask, uint8_t msg)
+void ICACHE_FLASH_ATTR ucg_com_SetLineStatus(ucg_t *ucg, uint8_t level, uint8_t mask, uint8_t msg)
 {
   if ( level == 0 )
   {
@@ -117,29 +117,29 @@ void ucg_com_SetLineStatus(ucg_t *ucg, uint8_t level, uint8_t mask, uint8_t msg)
   }
 }
 
-void ucg_com_SetResetLineStatus(ucg_t *ucg, uint8_t level)
+void ICACHE_FLASH_ATTR ucg_com_SetResetLineStatus(ucg_t *ucg, uint8_t level)
 {
   ucg_com_SetLineStatus(ucg, level, UCG_COM_STATUS_MASK_RESET, UCG_COM_MSG_CHANGE_RESET_LINE);
 }
 
-void ucg_com_SetCSLineStatus(ucg_t *ucg, uint8_t level)
+void ICACHE_FLASH_ATTR ucg_com_SetCSLineStatus(ucg_t *ucg, uint8_t level)
 {
   ucg_com_SetLineStatus(ucg, level, UCG_COM_STATUS_MASK_CS, UCG_COM_MSG_CHANGE_CS_LINE);
 }
 
-void ucg_com_SetCDLineStatus(ucg_t *ucg, uint8_t level)
+void ICACHE_FLASH_ATTR ucg_com_SetCDLineStatus(ucg_t *ucg, uint8_t level)
 {
   ucg_com_SetLineStatus(ucg, level, UCG_COM_STATUS_MASK_CD, UCG_COM_MSG_CHANGE_CD_LINE);
 }
 
 /* delay in microseconds */
-void ucg_com_DelayMicroseconds(ucg_t *ucg, uint16_t delay)
+void ICACHE_FLASH_ATTR ucg_com_DelayMicroseconds(ucg_t *ucg, uint16_t delay)
 {
   ucg->com_cb(ucg, UCG_COM_MSG_DELAY, delay, NULL);
 }
 
 /* delay in milliseconds */
-void ucg_com_DelayMilliseconds(ucg_t *ucg, uint16_t delay)
+void ICACHE_FLASH_ATTR ucg_com_DelayMilliseconds(ucg_t *ucg, uint16_t delay)
 {
   while( delay > 0 )
   {
@@ -150,36 +150,36 @@ void ucg_com_DelayMilliseconds(ucg_t *ucg, uint16_t delay)
 
 
 #ifndef ucg_com_SendByte
-void ucg_com_SendByte(ucg_t *ucg, uint8_t byte)
+void ICACHE_FLASH_ATTR ucg_com_SendByte(ucg_t *ucg, uint8_t byte)
 {
   ucg->com_cb(ucg, UCG_COM_MSG_SEND_BYTE, byte, NULL);
 }
 #endif
 
-void ucg_com_SendRepeatByte(ucg_t *ucg, uint16_t cnt, uint8_t byte)
+void ICACHE_FLASH_ATTR ucg_com_SendRepeatByte(ucg_t *ucg, uint16_t cnt, uint8_t byte)
 {
   ucg->com_cb(ucg, UCG_COM_MSG_REPEAT_1_BYTE, cnt, &byte);
 }
 
-void ucg_com_SendRepeat2Bytes(ucg_t *ucg, uint16_t cnt, uint8_t *byte_ptr)
+void ICACHE_FLASH_ATTR ucg_com_SendRepeat2Bytes(ucg_t *ucg, uint16_t cnt, uint8_t *byte_ptr)
 {
   ucg->com_cb(ucg, UCG_COM_MSG_REPEAT_2_BYTES, cnt, byte_ptr);
 }
 
 
 #ifndef ucg_com_SendRepeat3Bytes
-void ucg_com_SendRepeat3Bytes(ucg_t *ucg, uint16_t cnt, uint8_t *byte_ptr)
+void ICACHE_FLASH_ATTR ucg_com_SendRepeat3Bytes(ucg_t *ucg, uint16_t cnt, uint8_t *byte_ptr)
 {
   ucg->com_cb(ucg, UCG_COM_MSG_REPEAT_3_BYTES, cnt, byte_ptr);
 }
 #endif
 
-void ucg_com_SendString(ucg_t *ucg, uint16_t cnt, const uint8_t *byte_ptr)
+void ICACHE_FLASH_ATTR ucg_com_SendString(ucg_t *ucg, uint16_t cnt, const uint8_t *byte_ptr)
 {
   ucg->com_cb(ucg, UCG_COM_MSG_SEND_STR, cnt, (uint8_t *)byte_ptr);
 }
 
-void ucg_com_SendStringP(ucg_t *ucg, uint16_t cnt, const ucg_pgm_uint8_t *byte_ptr)
+void ICACHE_FLASH_ATTR ucg_com_SendStringP(ucg_t *ucg, uint16_t cnt, const ucg_pgm_uint8_t *byte_ptr)
 {
   uint8_t b;
   while( cnt > 0 )
@@ -193,7 +193,7 @@ void ucg_com_SendStringP(ucg_t *ucg, uint16_t cnt, const ucg_pgm_uint8_t *byte_p
 }
 
 
-void ucg_com_SendCmdDataSequence(ucg_t *ucg, uint16_t cnt, const uint8_t *byte_ptr, uint8_t cd_line_status_at_end)
+void ICACHE_FLASH_ATTR ucg_com_SendCmdDataSequence(ucg_t *ucg, uint16_t cnt, const uint8_t *byte_ptr, uint8_t cd_line_status_at_end)
 {
   ucg->com_cb(ucg, UCG_COM_MSG_SEND_CD_DATA_SEQUENCE, cnt, (uint8_t *)byte_ptr);
   ucg_com_SetCDLineStatus(ucg, cd_line_status_at_end);	// ensure that the status is set correctly for the CD line */
@@ -295,7 +295,7 @@ CFG_CD(c,a)	Configure CMD/DATA line: "c" logic level CMD, "a" logic level CMD Ar
 
 */
 
-static void ucg_com_SendCmdArg(ucg_t *ucg, const ucg_pgm_uint8_t *data, uint8_t cmd_cnt, uint8_t arg_cnt)
+static void ICACHE_FLASH_ATTR ucg_com_SendCmdArg(ucg_t *ucg, const ucg_pgm_uint8_t *data, uint8_t cmd_cnt, uint8_t arg_cnt)
 {
   ucg_com_SetCDLineStatus(ucg, (ucg->com_cfg_cd>>1)&1 );
   ucg_com_SendStringP(ucg, cmd_cnt, data);
@@ -309,7 +309,7 @@ static void ucg_com_SendCmdArg(ucg_t *ucg, const ucg_pgm_uint8_t *data, uint8_t 
 
 
 //void ucg_com_SendCmdSeq(ucg_t *ucg, const ucg_pgm_uint8_t *data)
-void ucg_com_SendCmdSeq(ucg_t *ucg, const ucg_pgm_uint8_t *data)
+void ICACHE_FLASH_ATTR ucg_com_SendCmdSeq(ucg_t *ucg, const ucg_pgm_uint8_t *data)
 {
   uint8_t b;
   uint8_t bb;

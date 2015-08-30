@@ -118,15 +118,15 @@ typedef void * ucg_glyph_t;
 */
 
 /* use case: What is the width and the height of the minimal box into which string s fints? */
-void ucg_font_GetStrSize(const void *font, const char *s, ucg_int_t *width, ucg_int_t *height);
-void ucg_font_GetStrSizeP(const void *font, const char *s, ucg_int_t *width, ucg_int_t *height);
+void ICACHE_FLASH_ATTR ucg_font_GetStrSize(const void *font, const char *s, ucg_int_t *width, ucg_int_t *height);
+void ICACHE_FLASH_ATTR ucg_font_GetStrSizeP(const void *font, const char *s, ucg_int_t *width, ucg_int_t *height);
 
 /* use case: lower left edge of a minimal box is known, what is the correct x, y position for the string draw procedure */
-void ucg_font_AdjustXYToDraw(const void *font, const char *s, ucg_int_t *x, ucg_int_t *y);
-void ucg_font_AdjustXYToDrawP(const void *font, const char *s, ucg_int_t *x, ucg_int_t *y);
+void ICACHE_FLASH_ATTR ucg_font_AdjustXYToDraw(const void *font, const char *s, ucg_int_t *x, ucg_int_t *y);
+void ICACHE_FLASH_ATTR ucg_font_AdjustXYToDrawP(const void *font, const char *s, ucg_int_t *x, ucg_int_t *y);
 
 /* use case: Baseline origin known, return minimal box */
-void ucg_font_GetStrMinBox(ucg_t *ucg, const void *font, const char *s, ucg_int_t *x, ucg_int_t *y, ucg_int_t *width, ucg_int_t *height);
+void ICACHE_FLASH_ATTR ucg_font_GetStrMinBox(ucg_t *ucg, const void *font, const char *s, ucg_int_t *x, ucg_int_t *y, ucg_int_t *width, ucg_int_t *height);
 
 /* procedures */
 
@@ -135,14 +135,14 @@ void ucg_font_GetStrMinBox(ucg_t *ucg, const void *font, const char *s, ucg_int_
 
 /* removed NOINLINE, because it leads to smaller code, might also be faster */
 //static uint8_t ucg_font_get_byte(const ucg_fntpgm_uint8_t *font, uint8_t offset) UCG_NOINLINE;
-static uint8_t ucg_font_get_byte(const ucg_fntpgm_uint8_t *font, uint8_t offset)
+static uint8_t ICACHE_FLASH_ATTR ucg_font_get_byte(const ucg_fntpgm_uint8_t *font, uint8_t offset)
 {
   font += offset;
   return ucg_pgm_read( (ucg_pgm_uint8_t *)font );  
 }
 
-static uint16_t ucg_font_get_word(const ucg_fntpgm_uint8_t *font, uint8_t offset) UCG_NOINLINE; 
-static uint16_t ucg_font_get_word(const ucg_fntpgm_uint8_t *font, uint8_t offset)
+static uint16_t ICACHE_FLASH_ATTR ucg_font_get_word(const ucg_fntpgm_uint8_t *font, uint8_t offset) UCG_NOINLINE; 
+static uint16_t ICACHE_FLASH_ATTR ucg_font_get_word(const ucg_fntpgm_uint8_t *font, uint8_t offset)
 {
     uint16_t pos;
     font += offset;
@@ -155,7 +155,7 @@ static uint16_t ucg_font_get_word(const ucg_fntpgm_uint8_t *font, uint8_t offset
 
 /*========================================================================*/
 /* new font format */
-void ucg_read_font_info(ucg_font_info_t *font_info, const ucg_fntpgm_uint8_t *font)
+void ICACHE_FLASH_ATTR ucg_read_font_info(ucg_font_info_t *font_info, const ucg_fntpgm_uint8_t *font)
 {
   /* offset 0 */
   font_info->glyph_cnt = ucg_font_get_byte(font, 0);
@@ -231,7 +231,7 @@ void ucg_read_font_info(ucg_font_info_t *font_info, const ucg_fntpgm_uint8_t *fo
 // }
 
 
-uint8_t ucg_font_GetCapitalAHeight(const void *font)
+uint8_t ICACHE_FLASH_ATTR ucg_font_GetCapitalAHeight(const void *font)
 {
   return ucg_font_get_byte(font, 13);
 }
@@ -250,14 +250,14 @@ uint16_t ucg_font_GetEncoding97Pos(const void *font)
 }
 */
 
-uint8_t ucg_font_GetFontStartEncoding(const void *font_arg)
+uint8_t ICACHE_FLASH_ATTR ucg_font_GetFontStartEncoding(const void *font_arg)
 {
   const uint8_t *font = font_arg;
   font += UCG_FONT_DATA_STRUCT_SIZE;
   return ucg_pgm_read( ((ucg_pgm_uint8_t *)font) );
 }
 
-uint8_t ucg_font_GetFontEndEncoding(const void *font_arg)
+uint8_t ICACHE_FLASH_ATTR ucg_font_GetFontEndEncoding(const void *font_arg)
 {
   uint8_t encoding = 0;
   const uint8_t *font = font_arg;
@@ -274,7 +274,7 @@ uint8_t ucg_font_GetFontEndEncoding(const void *font_arg)
   return encoding;  
 }
 
-int8_t ucg_font_GetLowerGDescent(const void *font)
+int8_t ICACHE_FLASH_ATTR ucg_font_GetLowerGDescent(const void *font)
 {
   return ucg_font_get_byte(font, 14);
 }
@@ -308,7 +308,7 @@ int8_t ucg_font_GetFontXDescent(const void *font)
 // }
 
 /* calculate the overall length of the font, only used to create the picture for the google wiki */
-size_t ucg_font_GetSize(const void *font_arg)
+size_t ICACHE_FLASH_ATTR ucg_font_GetSize(const void *font_arg)
 {
   const uint8_t *font = font_arg;
   font += UCG_FONT_DATA_STRUCT_SIZE;
@@ -327,34 +327,34 @@ size_t ucg_font_GetSize(const void *font_arg)
 /*========================================================================*/
 /* u8g interface, font access */
 
-uint8_t ucg_GetFontBBXWidth(ucg_t *ucg)
+uint8_t ICACHE_FLASH_ATTR ucg_GetFontBBXWidth(ucg_t *ucg)
 {
   // OBSOLETE return ucg_font_GetBBXWidth(ucg->font);
   return ucg->font_info.max_char_width;		/* new font info structure */
 }
 
-uint8_t ucg_GetFontBBXHeight(ucg_t *ucg)
+uint8_t ICACHE_FLASH_ATTR ucg_GetFontBBXHeight(ucg_t *ucg)
 {
   // OBSOLETE return ucg_font_GetBBXHeight(ucg->font);
   return ucg->font_info.max_char_height;		/* new font info structure */
 }
 
-int8_t u8g_GetFontBBXOffX(ucg_t *ucg) UCG_NOINLINE;
-int8_t u8g_GetFontBBXOffX(ucg_t *ucg)
+int8_t ICACHE_FLASH_ATTR u8g_GetFontBBXOffX(ucg_t *ucg) UCG_NOINLINE;
+int8_t ICACHE_FLASH_ATTR u8g_GetFontBBXOffX(ucg_t *ucg)
 {
   // OBSOLETE return ucg_font_GetBBXOffX(ucg->font);
   return ucg->font_info.x_offset;		/* new font info structure */
 }
 
-int8_t ucg_GetFontBBXOffY(ucg_t *ucg) UCG_NOINLINE;
-int8_t ucg_GetFontBBXOffY(ucg_t *ucg)
+int8_t ICACHE_FLASH_ATTR ucg_GetFontBBXOffY(ucg_t *ucg) UCG_NOINLINE;
+int8_t ICACHE_FLASH_ATTR ucg_GetFontBBXOffY(ucg_t *ucg)
 {
   // OBSOLETE return ucg_font_GetBBXOffY(ucg->font);
   return ucg->font_info.y_offset;		/* new font info structure */
 }
 
-uint8_t ucg_GetFontCapitalAHeight(ucg_t *ucg) UCG_NOINLINE; 
-uint8_t ucg_GetFontCapitalAHeight(ucg_t *ucg)
+uint8_t ICACHE_FLASH_ATTR ucg_GetFontCapitalAHeight(ucg_t *ucg) UCG_NOINLINE; 
+uint8_t ICACHE_FLASH_ATTR ucg_GetFontCapitalAHeight(ucg_t *ucg)
 {
   // OBSOLETE return ucg_font_GetCapitalAHeight(ucg->font);
   return ucg->font_info.ascent_A;		/* new font info structure */
@@ -364,7 +364,7 @@ uint8_t ucg_GetFontCapitalAHeight(ucg_t *ucg)
 /* glyph handling */
 
 /* optimized */
-uint8_t ucg_font_decode_get_unsigned_bits(ucg_font_decode_t *f, uint8_t cnt) 
+uint8_t ICACHE_FLASH_ATTR ucg_font_decode_get_unsigned_bits(ucg_font_decode_t *f, uint8_t cnt) 
 {
   uint8_t val;
   uint8_t bit_pos = f->decode_bit_pos;
@@ -409,7 +409,7 @@ uint8_t ucg_font_decode_get_unsigned_bits(ucg_font_decode_t *f, uint8_t cnt)
 
 */
 /* optimized */
-int8_t ucg_font_decode_get_signed_bits(ucg_font_decode_t *f, uint8_t cnt)
+int8_t ICACHE_FLASH_ATTR ucg_font_decode_get_signed_bits(ucg_font_decode_t *f, uint8_t cnt)
 {
   int8_t v, d;
   v = (int8_t)ucg_font_decode_get_unsigned_bits(f, cnt);
@@ -447,8 +447,8 @@ static void ucg_add_vector(ucg_int_t *dest_x, ucg_int_t *dest_y, int8_t x, int8_
 }
 */
 
-static ucg_int_t ucg_add_vector_y(ucg_int_t dy, int8_t x, int8_t y, uint8_t dir) UCG_NOINLINE;
-static ucg_int_t ucg_add_vector_y(ucg_int_t dy, int8_t x, int8_t y, uint8_t dir)
+static ucg_int_t ICACHE_FLASH_ATTR ucg_add_vector_y(ucg_int_t dy, int8_t x, int8_t y, uint8_t dir) UCG_NOINLINE;
+static ucg_int_t ICACHE_FLASH_ATTR ucg_add_vector_y(ucg_int_t dy, int8_t x, int8_t y, uint8_t dir)
 {
   switch(dir)
   {
@@ -468,8 +468,8 @@ static ucg_int_t ucg_add_vector_y(ucg_int_t dy, int8_t x, int8_t y, uint8_t dir)
   return dy;
 }
 
-static ucg_int_t ucg_add_vector_x(ucg_int_t dx, int8_t x, int8_t y, uint8_t dir) UCG_NOINLINE;
-static ucg_int_t ucg_add_vector_x(ucg_int_t dx, int8_t x, int8_t y, uint8_t dir)
+static ucg_int_t ICACHE_FLASH_ATTR ucg_add_vector_x(ucg_int_t dx, int8_t x, int8_t y, uint8_t dir) UCG_NOINLINE;
+static ucg_int_t ICACHE_FLASH_ATTR ucg_add_vector_x(ucg_int_t dx, int8_t x, int8_t y, uint8_t dir)
 {
   switch(dir)
   {
@@ -507,7 +507,7 @@ static ucg_int_t ucg_add_vector_x(ucg_int_t dx, int8_t x, int8_t y, uint8_t dir)
   Called by:
     ucg_font_decode_len()
 */
-void ucg_font_decode_draw_pixel(ucg_t *ucg, uint8_t lx, uint8_t ly, uint8_t cnt, uint8_t is_foreground)
+void ICACHE_FLASH_ATTR ucg_font_decode_draw_pixel(ucg_t *ucg, uint8_t lx, uint8_t ly, uint8_t cnt, uint8_t is_foreground)
 {
   ucg_int_t x, y;
   ucg_font_decode_t *decode = &(ucg->font_decode);
@@ -559,7 +559,7 @@ void ucg_font_decode_draw_pixel(ucg_t *ucg, uint8_t lx, uint8_t ly, uint8_t cnt,
     ucg_font_decode_glyph()
 */
 /* optimized */
-void ucg_font_decode_len(ucg_t *ucg, uint8_t len, uint8_t is_foreground)
+void ICACHE_FLASH_ATTR ucg_font_decode_len(ucg_t *ucg, uint8_t len, uint8_t is_foreground)
 {
   uint8_t cnt;	/* total number of remaining pixels, which have to be drawn */
   uint8_t rem; 	/* remaining pixel to the right edge of the glyph */
@@ -639,7 +639,7 @@ void ucg_font_decode_len(ucg_t *ucg, uint8_t len, uint8_t is_foreground)
   
 }
 
-static void ucg_font_setup_decode(ucg_t *ucg, const uint8_t *glyph_data)
+static void ICACHE_FLASH_ATTR ucg_font_setup_decode(ucg_t *ucg, const uint8_t *glyph_data)
 {
   ucg_font_decode_t *decode = &(ucg->font_decode);
   decode->decode_ptr = glyph_data;
@@ -667,7 +667,7 @@ static void ucg_font_setup_decode(ucg_t *ucg, const uint8_t *glyph_data)
     ucg_font_decode_len()
 */
 /* optimized */
-int8_t ucg_font_decode_glyph(ucg_t *ucg, const uint8_t *glyph_data)
+int8_t ICACHE_FLASH_ATTR ucg_font_decode_glyph(ucg_t *ucg, const uint8_t *glyph_data)
 {
   uint8_t a, b;
   int8_t x, y;
@@ -718,7 +718,7 @@ int8_t ucg_font_decode_glyph(ucg_t *ucg, const uint8_t *glyph_data)
   Return:
     Address of the glyph data or NULL, if the encoding is not avialable in the font.
 */
-const uint8_t *ucg_font_get_glyph_data(ucg_t *ucg, uint8_t encoding)
+const uint8_t* ICACHE_FLASH_ATTR ucg_font_get_glyph_data(ucg_t *ucg, uint8_t encoding)
 {
   const uint8_t *font = ucg->font;
   font += UCG_FONT_DATA_STRUCT_SIZE;
@@ -745,7 +745,7 @@ const uint8_t *ucg_font_get_glyph_data(ucg_t *ucg, uint8_t encoding)
   return NULL;
 }
 
-ucg_int_t ucg_font_draw_glyph(ucg_t *ucg, ucg_int_t x, ucg_int_t y, uint8_t dir, uint8_t encoding)
+ucg_int_t ICACHE_FLASH_ATTR ucg_font_draw_glyph(ucg_t *ucg, ucg_int_t x, ucg_int_t y, uint8_t dir, uint8_t encoding)
 {
   ucg_int_t dx = 0;
   ucg->font_decode.target_x = x;
@@ -762,7 +762,7 @@ ucg_int_t ucg_font_draw_glyph(ucg_t *ucg, ucg_int_t x, ucg_int_t y, uint8_t dir,
 
 
 
-uint8_t ucg_IsGlyph(ucg_t *ucg, uint8_t requested_encoding)
+uint8_t ICACHE_FLASH_ATTR ucg_IsGlyph(ucg_t *ucg, uint8_t requested_encoding)
 {
   /* updated to new code */
   if ( ucg_font_get_glyph_data(ucg, requested_encoding) != NULL )
@@ -779,7 +779,7 @@ int8_t ucg_GetGlyphDeltaX(ucg_t *ucg, uint8_t requested_encoding)
 }
 */
 
-int8_t ucg_GetGlyphWidth(ucg_t *ucg, uint8_t requested_encoding)
+int8_t ICACHE_FLASH_ATTR ucg_GetGlyphWidth(ucg_t *ucg, uint8_t requested_encoding)
 {
   const uint8_t *glyph_data = ucg_font_get_glyph_data(ucg, requested_encoding);
   if ( glyph_data == NULL )
@@ -801,12 +801,12 @@ int8_t ucg_GetGlyphWidth(ucg_t *ucg, uint8_t requested_encoding)
     UCG_FONT_MODE_NONE
   This has been changed for the new font procedures  
 */
-void ucg_SetFontMode(ucg_t *ucg, uint8_t is_transparent)
+void ICACHE_FLASH_ATTR ucg_SetFontMode(ucg_t *ucg, uint8_t is_transparent)
 {
   ucg->font_decode.is_transparent = is_transparent;		// new font procedures
 }
 
-ucg_int_t ucg_DrawGlyph(ucg_t *ucg, ucg_int_t x, ucg_int_t y, uint8_t dir, uint8_t encoding)
+ucg_int_t ICACHE_FLASH_ATTR ucg_DrawGlyph(ucg_t *ucg, ucg_int_t x, ucg_int_t y, uint8_t dir, uint8_t encoding)
 {
   switch(dir)
   {
@@ -826,7 +826,7 @@ ucg_int_t ucg_DrawGlyph(ucg_t *ucg, ucg_int_t x, ucg_int_t y, uint8_t dir, uint8
   return ucg_font_draw_glyph(ucg, x, y, dir, encoding);
 }
 
-ucg_int_t ucg_DrawString(ucg_t *ucg, ucg_int_t x, ucg_int_t y, uint8_t dir, const char *str)
+ucg_int_t ICACHE_FLASH_ATTR ucg_DrawString(ucg_t *ucg, ucg_int_t x, ucg_int_t y, uint8_t dir, const char *str)
 {
   ucg_int_t delta, sum;
   sum = 0;
@@ -861,7 +861,7 @@ ucg_int_t ucg_DrawString(ucg_t *ucg, ucg_int_t x, ucg_int_t y, uint8_t dir, cons
 
 /* set ascent/descent for reference point calculation */
 
-void ucg_UpdateRefHeight(ucg_t *ucg)
+void ICACHE_FLASH_ATTR ucg_UpdateRefHeight(ucg_t *ucg)
 {
   if ( ucg->font == NULL )
     return;
@@ -886,19 +886,19 @@ void ucg_UpdateRefHeight(ucg_t *ucg)
   }  
 }
 
-void ucg_SetFontRefHeightText(ucg_t *ucg)
+void ICACHE_FLASH_ATTR ucg_SetFontRefHeightText(ucg_t *ucg)
 {
   ucg->font_height_mode = UCG_FONT_HEIGHT_MODE_TEXT;
   ucg_UpdateRefHeight(ucg);
 }
 
-void ucg_SetFontRefHeightExtendedText(ucg_t *ucg)
+void ICACHE_FLASH_ATTR ucg_SetFontRefHeightExtendedText(ucg_t *ucg)
 {
   ucg->font_height_mode = UCG_FONT_HEIGHT_MODE_XTEXT;
   ucg_UpdateRefHeight(ucg);
 }
 
-void ucg_SetFontRefHeightAll(ucg_t *ucg)
+void ICACHE_FLASH_ATTR ucg_SetFontRefHeightAll(ucg_t *ucg)
 {
   ucg->font_height_mode = UCG_FONT_HEIGHT_MODE_ALL;
   ucg_UpdateRefHeight(ucg);
@@ -907,28 +907,28 @@ void ucg_SetFontRefHeightAll(ucg_t *ucg)
 /*===============================================*/
 /* callback procedures to correct the y position */
 
-ucg_int_t ucg_font_calc_vref_font(ucg_t *ucg)
+ucg_int_t ICACHE_FLASH_ATTR ucg_font_calc_vref_font(ucg_t *ucg)
 {
   return 0;
 }
 
-void ucg_SetFontPosBaseline(ucg_t *ucg)
+void ICACHE_FLASH_ATTR ucg_SetFontPosBaseline(ucg_t *ucg)
 {
   ucg->font_calc_vref = ucg_font_calc_vref_font;
 }
 
 
-ucg_int_t ucg_font_calc_vref_bottom(ucg_t *ucg)
+ucg_int_t ICACHE_FLASH_ATTR ucg_font_calc_vref_bottom(ucg_t *ucg)
 {
   return (ucg_int_t)(ucg->font_ref_descent);
 }
 
-void ucg_SetFontPosBottom(ucg_t *ucg)
+void ICACHE_FLASH_ATTR ucg_SetFontPosBottom(ucg_t *ucg)
 {
   ucg->font_calc_vref = ucg_font_calc_vref_bottom;
 }
 
-ucg_int_t ucg_font_calc_vref_top(ucg_t *ucg)
+ucg_int_t ICACHE_FLASH_ATTR ucg_font_calc_vref_top(ucg_t *ucg)
 {
   ucg_int_t tmp;
   /* reference pos is one pixel above the upper edge of the reference glyph */
@@ -937,12 +937,12 @@ ucg_int_t ucg_font_calc_vref_top(ucg_t *ucg)
   return tmp;
 }
 
-void ucg_SetFontPosTop(ucg_t *ucg)
+void ICACHE_FLASH_ATTR ucg_SetFontPosTop(ucg_t *ucg)
 {
   ucg->font_calc_vref = ucg_font_calc_vref_top;
 }
 
-ucg_int_t ucg_font_calc_vref_center(ucg_t *ucg)
+ucg_int_t ICACHE_FLASH_ATTR ucg_font_calc_vref_center(ucg_t *ucg)
 {
   int8_t tmp;
   tmp = ucg->font_ref_ascent;
@@ -952,14 +952,14 @@ ucg_int_t ucg_font_calc_vref_center(ucg_t *ucg)
   return tmp;
 }
 
-void ucg_SetFontPosCenter(ucg_t *ucg)
+void ICACHE_FLASH_ATTR ucg_SetFontPosCenter(ucg_t *ucg)
 {
   ucg->font_calc_vref = ucg_font_calc_vref_center;
 }
 
 /*===============================================*/
 
-void ucg_SetFont(ucg_t *ucg, const ucg_fntpgm_uint8_t  *font)
+void ICACHE_FLASH_ATTR ucg_SetFont(ucg_t *ucg, const ucg_fntpgm_uint8_t  *font)
 {
   if ( ucg->font != font )
   {
@@ -972,7 +972,7 @@ void ucg_SetFont(ucg_t *ucg, const ucg_fntpgm_uint8_t  *font)
 
 /*===============================================*/
 
-ucg_int_t ucg_GetStrWidth(ucg_t *ucg, const char *s)
+ucg_int_t ICACHE_FLASH_ATTR ucg_GetStrWidth(ucg_t *ucg, const char *s)
 {
   ucg_int_t  w;
   uint8_t encoding;

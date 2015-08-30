@@ -36,7 +36,7 @@
 
 #include "ucg.h"
 
-void ucg_Draw90Line(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t len, ucg_int_t dir, ucg_int_t col_idx)
+void ICACHE_FLASH_ATTR ucg_Draw90Line(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t len, ucg_int_t dir, ucg_int_t col_idx)
 {
   ucg->arg.pixel.rgb.color[0] = ucg->arg.rgb[col_idx].color[0];
   ucg->arg.pixel.rgb.color[1] = ucg->arg.rgb[col_idx].color[1];
@@ -48,22 +48,22 @@ void ucg_Draw90Line(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t len, ucg_int
   ucg_DrawL90FXWithArg(ucg);
 }
 
-void ucg_DrawHLine(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t len)
+void ICACHE_FLASH_ATTR ucg_DrawHLine(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t len)
 {
   ucg_Draw90Line(ucg, x, y, len, 0, 0);
 }
 
-void ucg_DrawVLine(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t len)
+void ICACHE_FLASH_ATTR ucg_DrawVLine(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t len)
 {
   ucg_Draw90Line(ucg, x, y, len, 1, 0);
 }
 
-void ucg_DrawHRLine(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t len)
+void ICACHE_FLASH_ATTR ucg_DrawHRLine(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t len)
 {
   ucg_Draw90Line(ucg, x, y, len, 2, 0);
 }
 
-void ucg_DrawGradientLine(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t len, ucg_int_t dir)
+void ICACHE_FLASH_ATTR ucg_DrawGradientLine(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t len, ucg_int_t dir)
 {
   /* color goes from ucg->arg.rgb[0] to ucg->arg.rgb[1] */
   ucg->arg.pixel.pos.x = x;
@@ -73,7 +73,7 @@ void ucg_DrawGradientLine(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t len, u
   ucg_DrawL90SEWithArg(ucg);
 }
 
-void ucg_DrawLine(ucg_t *ucg, ucg_int_t x1, ucg_int_t y1, ucg_int_t x2, ucg_int_t y2)
+void ICACHE_FLASH_ATTR ucg_DrawLine(ucg_t *ucg, ucg_int_t x1, ucg_int_t y1, ucg_int_t x2, ucg_int_t y2)
 {
   ucg_int_t tmp;
   ucg_int_t x,y;

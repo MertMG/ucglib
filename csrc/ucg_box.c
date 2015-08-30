@@ -35,7 +35,7 @@
 
 #include "ucg.h"
 
-void ucg_DrawBox(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t w, ucg_int_t h)
+void ICACHE_FLASH_ATTR ucg_DrawBox(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t w, ucg_int_t h)
 {
   while( h > 0 )
   {
@@ -50,7 +50,7 @@ void ucg_DrawBox(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t w, ucg_int_t h)
   - reset clip range to max
   - set draw color to white
 */
-void ucg_ClearScreen(ucg_t *ucg)
+void ICACHE_FLASH_ATTR ucg_ClearScreen(ucg_t *ucg)
 {
   ucg_SetColor(ucg, 0, 0, 0, 0);
   ucg_SetMaxClipRange(ucg);
@@ -60,7 +60,7 @@ void ucg_ClearScreen(ucg_t *ucg)
 
 
 
-void ucg_DrawRBox(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t w, ucg_int_t h, ucg_int_t r)
+void ICACHE_FLASH_ATTR ucg_DrawRBox(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t w, ucg_int_t h, ucg_int_t r)
 {
   ucg_int_t xl, yu;
   ucg_int_t yl, xr;
@@ -109,7 +109,7 @@ void ucg_DrawRBox(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t w, ucg_int_t h
 
 ucg_ccs_t ucg_ccs_box[6];	/* color component sliders used by GradientBox */
 
-void ucg_DrawGradientBox(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t w, ucg_int_t h)
+void ICACHE_FLASH_ATTR ucg_DrawGradientBox(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t w, ucg_int_t h)
 {
   uint8_t i;
   
@@ -149,7 +149,7 @@ void ucg_DrawGradientBox(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t w, ucg_
 
 
 /* restrictions: w > 0 && h > 0 */
-void ucg_DrawFrame(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t w, ucg_int_t h)
+void ICACHE_FLASH_ATTR ucg_DrawFrame(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t w, ucg_int_t h)
 {
   ucg_int_t xtmp = x;
   
@@ -163,7 +163,7 @@ void ucg_DrawFrame(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t w, ucg_int_t 
   ucg_DrawHLine(ucg, xtmp, y, w);
 }
 
-void ucg_DrawRFrame(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t w, ucg_int_t h, ucg_int_t r)
+void ICACHE_FLASH_ATTR ucg_DrawRFrame(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t w, ucg_int_t h, ucg_int_t r)
 {
   ucg_int_t xl, yu;
 

@@ -39,7 +39,7 @@
 #include <assert.h>
 
 /* Side-Effects: Update dimension and reset clip range to max */
-void ucg_UndoRotate(ucg_t *ucg)
+void ICACHE_FLASH_ATTR ucg_UndoRotate(ucg_t *ucg)
 {
   if ( ucg->rotate_chain_device_cb != NULL )
   {
@@ -53,7 +53,7 @@ void ucg_UndoRotate(ucg_t *ucg)
 /*================================================*/
 /* 90 degree */
 
-static void ucg_rotate_90_xy(ucg_xy_t *xy, ucg_int_t display_width)
+static void ICACHE_FLASH_ATTR ucg_rotate_90_xy(ucg_xy_t *xy, ucg_int_t display_width)
 {   
     ucg_int_t x, y;
     y = xy->x;
@@ -65,7 +65,7 @@ static void ucg_rotate_90_xy(ucg_xy_t *xy, ucg_int_t display_width)
   
 }
 
-ucg_int_t ucg_dev_rotate90(ucg_t *ucg, ucg_int_t msg, void *data)
+ucg_int_t ICACHE_FLASH_ATTR ucg_dev_rotate90(ucg_t *ucg, ucg_int_t msg, void *data)
 {
   switch(msg)
   {
@@ -119,7 +119,7 @@ ucg_int_t ucg_dev_rotate90(ucg_t *ucg, ucg_int_t msg, void *data)
 }
 
 /* Side-Effects: Update dimension and reset clip range to max */
-void ucg_SetRotate90(ucg_t *ucg)
+void ICACHE_FLASH_ATTR ucg_SetRotate90(ucg_t *ucg)
 {
   ucg_UndoRotate(ucg);
   ucg->rotate_chain_device_cb = ucg->device_cb;
@@ -131,7 +131,7 @@ void ucg_SetRotate90(ucg_t *ucg)
 /*================================================*/
 /* 180 degree */
 
-static void ucg_rotate_180_xy(ucg_t *ucg, ucg_xy_t *xy)
+static void ICACHE_FLASH_ATTR ucg_rotate_180_xy(ucg_t *ucg, ucg_xy_t *xy)
 {
     ucg_int_t x, y;
     y = ucg->rotate_dimension.h;
@@ -146,7 +146,7 @@ static void ucg_rotate_180_xy(ucg_t *ucg, ucg_xy_t *xy)
   
 }
 
-ucg_int_t ucg_dev_rotate180(ucg_t *ucg, ucg_int_t msg, void *data)
+ucg_int_t ICACHE_FLASH_ATTR ucg_dev_rotate180(ucg_t *ucg, ucg_int_t msg, void *data)
 {
   switch(msg)
   {
@@ -180,7 +180,7 @@ ucg_int_t ucg_dev_rotate180(ucg_t *ucg, ucg_int_t msg, void *data)
 }
 
 /* Side-Effects: Update dimension and reset clip range to max */
-void ucg_SetRotate180(ucg_t *ucg)
+void ICACHE_FLASH_ATTR ucg_SetRotate180(ucg_t *ucg)
 {
   ucg_UndoRotate(ucg);
   ucg->rotate_chain_device_cb = ucg->device_cb;
@@ -192,7 +192,7 @@ void ucg_SetRotate180(ucg_t *ucg)
 /*================================================*/
 /* 270 degree */
 
-static void ucg_rotate_270_xy(ucg_t *ucg, ucg_xy_t *xy)
+static void ICACHE_FLASH_ATTR ucg_rotate_270_xy(ucg_t *ucg, ucg_xy_t *xy)
 {
     ucg_int_t x, y;
     x = xy->y;
@@ -205,7 +205,7 @@ static void ucg_rotate_270_xy(ucg_t *ucg, ucg_xy_t *xy)
     xy->x = x;  
 }
 
-ucg_int_t ucg_dev_rotate270(ucg_t *ucg, ucg_int_t msg, void *data)
+ucg_int_t ICACHE_FLASH_ATTR ucg_dev_rotate270(ucg_t *ucg, ucg_int_t msg, void *data)
 {
   switch(msg)
   {
@@ -245,7 +245,7 @@ ucg_int_t ucg_dev_rotate270(ucg_t *ucg, ucg_int_t msg, void *data)
 }
 
 /* Side-Effects: Update dimension and reset clip range to max */
-void ucg_SetRotate270(ucg_t *ucg)
+void ICACHE_FLASH_ATTR ucg_SetRotate270(ucg_t *ucg)
 {
   ucg_UndoRotate(ucg);
   ucg->rotate_chain_device_cb = ucg->device_cb;

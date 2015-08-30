@@ -118,7 +118,7 @@ const ucg_pgm_uint8_t ucg_ssd1289_set_pos_dir3_seq[] =
   UCG_END()
 };
 
-ucg_int_t ucg_handle_ssd1289_l90fx(ucg_t *ucg)
+ucg_int_t ICACHE_FLASH_ATTR ucg_handle_ssd1289_l90fx(ucg_t *ucg)
 {
   uint8_t c[3];
   if ( ucg_clip_l90fx(ucg) != 0 )
@@ -173,7 +173,7 @@ const ucg_pgm_uint8_t ucg_ssd1289_set_y_pos_seq[] =
 };
 
 /* without CmdDataSequence */ 
-ucg_int_t xxxxxx_ucg_handle_ssd1289_l90tc(ucg_t *ucg)
+ucg_int_t ICACHE_FLASH_ATTR xxxxxx_ucg_handle_ssd1289_l90tc(ucg_t *ucg)
 {
   if ( ucg_clip_l90tc(ucg) != 0 )
   {
@@ -239,7 +239,7 @@ ucg_int_t xxxxxx_ucg_handle_ssd1289_l90tc(ucg_t *ucg)
 
 
 /* with CmdDataSequence */ 
-ucg_int_t ucg_handle_ssd1289_l90tc(ucg_t *ucg)
+ucg_int_t ICACHE_FLASH_ATTR ucg_handle_ssd1289_l90tc(ucg_t *ucg)
 {
   if ( ucg_clip_l90tc(ucg) != 0 )
   {
@@ -363,7 +363,7 @@ ucg_int_t ucg_handle_ssd1289_l90tc(ucg_t *ucg)
 }
 
 
-ucg_int_t ucg_handle_ssd1289_l90se(ucg_t *ucg)
+ucg_int_t ICACHE_FLASH_ATTR ucg_handle_ssd1289_l90se(ucg_t *ucg)
 {
   uint8_t i;
   uint8_t c[3];
@@ -414,7 +414,7 @@ ucg_int_t ucg_handle_ssd1289_l90se(ucg_t *ucg)
 }
 
 
-ucg_int_t ucg_dev_ic_ssd1289_18(ucg_t *ucg, ucg_int_t msg, void *data)
+ucg_int_t ICACHE_FLASH_ATTR ucg_dev_ic_ssd1289_18(ucg_t *ucg, ucg_int_t msg, void *data)
 {
   switch(msg)
   {

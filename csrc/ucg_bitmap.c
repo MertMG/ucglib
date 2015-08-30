@@ -37,7 +37,7 @@
 #include "ucg.h"
 
 #ifdef UCG_MSG_DRAW_L90TC
-void ucg_DrawTransparentBitmapLine(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t dir, ucg_int_t len, const unsigned char *bitmap)
+void ICACHE_FLASH_ATTR ucg_DrawTransparentBitmapLine(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t dir, ucg_int_t len, const unsigned char *bitmap)
 {
   ucg->arg.pixel.rgb.color[0] = ucg->arg.rgb[0].color[0];
   ucg->arg.pixel.rgb.color[1] = ucg->arg.rgb[0].color[1];
@@ -53,7 +53,7 @@ void ucg_DrawTransparentBitmapLine(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int
 #endif /* UCG_MSG_DRAW_L90TC */
 
 #ifdef UCG_MSG_DRAW_L90BF
-void ucg_DrawBitmapLine(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t dir, ucg_int_t len, const unsigned char *bitmap)
+void ICACHE_FLASH_ATTR ucg_DrawBitmapLine(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t dir, ucg_int_t len, const unsigned char *bitmap)
 {
   /*
   ucg->arg.pixel.rgb.color[0] = ucg->arg.rgb[0].color[0];
@@ -72,7 +72,7 @@ void ucg_DrawBitmapLine(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t dir, ucg
 #endif /* UCG_MSG_DRAW_L90BF */
 
 #ifdef ON_HOLD
-void ucg_DrawRLBitmap(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t dir, const unsigned char *rl_bitmap)
+void ICACHE_FLASH_ATTR ucg_DrawRLBitmap(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int_t dir, const unsigned char *rl_bitmap)
 {
   ucg->arg.pixel.rgb.color[0] = ucg->arg.rgb[0].color[0];
   ucg->arg.pixel.rgb.color[1] = ucg->arg.rgb[0].color[1];

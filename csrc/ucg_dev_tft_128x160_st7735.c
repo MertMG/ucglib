@@ -82,7 +82,7 @@ static const ucg_pgm_uint8_t ucg_tft_128x160_st7735_init_seq[] = {
   UCG_END(),					/* end of sequence */
 };
 
-ucg_int_t ucg_dev_st7735_18x128x160(ucg_t *ucg, ucg_int_t msg, void *data)
+ucg_int_t ICACHE_FLASH_ATTR ucg_dev_st7735_18x128x160(ucg_t *ucg, ucg_int_t msg, void *data)
 {
   switch(msg)
   {
