@@ -42,6 +42,9 @@ void ICACHE_FLASH_ATTR ucg_DrawBox(ucg_t *ucg, ucg_int_t x, ucg_int_t y, ucg_int
     ucg_DrawHLine(ucg, x, y, w);
     h--;
     y++;
+#if defined(ESP8266)
+    yield();
+#endif
   }  
 }
 
@@ -144,6 +147,9 @@ void ICACHE_FLASH_ATTR ucg_DrawGradientBox(ucg_t *ucg, ucg_int_t x, ucg_int_t y,
       ucg_ccs_step(ucg_ccs_box+i);
     h--;
     y++;
+#if defined(ESP8266)
+    yield();
+#endif
   }
 }
 

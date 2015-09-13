@@ -735,7 +735,9 @@ const uint8_t* ICACHE_FLASH_ATTR ucg_font_get_glyph_data(ucg_t *ucg, uint8_t enc
   for(;;)
   {
     if ( ucg_pgm_read( ((ucg_pgm_uint8_t *)font) + 1 ) == 0 )
+    {
       break;
+    }
     if ( ucg_pgm_read( (ucg_pgm_uint8_t *)font ) == encoding )
     {
       return font;
@@ -757,6 +759,9 @@ ucg_int_t ICACHE_FLASH_ATTR ucg_font_draw_glyph(ucg_t *ucg, ucg_int_t x, ucg_int
   {
     dx = ucg_font_decode_glyph(ucg, glyph_data);
   }
+#if defined(ESP8266)
+    yield();
+#endif
   return dx;
 }
 

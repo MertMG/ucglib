@@ -135,7 +135,7 @@ typedef uint8_t ucg_fntpgm_uint8_t;
 #define PGM_P  	    const char *
 #define PGM_VOID_P  const void *1
 #define PSTR(s) (__extension__({static const char __c[] PROGMEM = (s); &__c[0];}))
-#define pgm_read_byte_near(addr) 		                                           \
+#define ucg_pgm_read(addr) 		                                           \
 (__extension__({                                                               \
     PGM_P __local = (PGM_P)(addr);  /* isolate varible for macro expansion */         \
     ptrdiff_t __offset = ((uint32_t)__local & 0x00000003); /* byte aligned mask */            \
@@ -147,7 +147,6 @@ typedef uint8_t ucg_fntpgm_uint8_t;
 #define UCG_PROGMEM UCG_SECTION(".irom.text.")
 typedef uint8_t ucg_pgm_uint8_t;
 typedef uint8_t ucg_fntpgm_uint8_t;
-#define ucg_pgm_read(adr) pgm_read_byte_near(adr)
 #define UCG_PSTR(s) ((ucg_pgm_uint8_t *)PSTR(s))
 #else
 #define UCG_PROGMEM

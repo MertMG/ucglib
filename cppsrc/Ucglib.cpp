@@ -671,6 +671,9 @@ static int16_t ucg_com_arduino_3wire_9bit_HW_SPI(ucg_t *ucg, int16_t msg, uint16
       //SPI.setDataMode(SPI_MODE0);
     
 #endif
+#if defined(__XTENSA__)
+      SPI.setClockDivider( SPI_CLOCK_DIV2 );
+#endif
 #if defined(__SAM3X8E__)
       SPI.setClockDivider( (((ucg_com_info_t *)data)->serial_clk_speed * 84L + 999)/1000L );
 #endif

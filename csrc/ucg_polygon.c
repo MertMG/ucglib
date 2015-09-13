@@ -263,6 +263,9 @@ static void ICACHE_FLASH_ATTR pg_exec(pg_struct *pg, ucg_t *ucg)
       pg_line_init(pg, PG_RIGHT);
     }
     i--;
+#if defined(ESP8266)
+    yield();
+#endif
   } while( i > 0 );
 }
 

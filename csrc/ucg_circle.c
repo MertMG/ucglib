@@ -191,6 +191,9 @@ void ICACHE_FLASH_ATTR ucg_draw_disc(ucg_t *ucg, ucg_int_t x0, ucg_int_t y0, ucg
     f += ddF_x;
 
     ucg_draw_disc_section(ucg, x, y, x0, y0, option);    
+#if defined(ESP8266)
+    yield();
+#endif
   }
 }
 
